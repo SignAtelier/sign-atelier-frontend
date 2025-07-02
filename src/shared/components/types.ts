@@ -1,4 +1,4 @@
-import type { ReactNode, MouseEventHandler, ChangeEventHandler } from "react";
+import type { ChangeEventHandler, MouseEventHandler, ReactNode } from "react";
 
 export interface ButtonProps {
   children: ReactNode;
@@ -20,7 +20,5 @@ export interface InputProps {
 
 export interface ModalProps {
   children: ReactNode;
-  onClick: () => void;
   onClose: () => void;
-  buttonText?: string;
 }
