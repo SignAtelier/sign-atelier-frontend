@@ -13,7 +13,7 @@ const modal = true;
 const Home = () => {
   return (
     <div className="size-full">
-      <Header buttonText="로그인" onButtonClick={() => {}} />
+      <Header />
       {modal && <LoginModal />}
 
       <div className="py-20">

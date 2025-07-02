@@ -9,7 +9,7 @@ const centerClass = `
 const SignatureResult = () => {
   return (
     <div className="size-full">
-      <Header buttonText="로그인" onButtonClick={() => {}} />
+      <Header />
 
       <div className="py-20">
         <p className="text-3xl p-2 font-black">싸인을 생성했습니다.</p>

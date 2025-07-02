@@ -7,11 +7,6 @@ export interface ButtonProps {
   style?: string;
 }
 
-export interface HeaderProps {
-  buttonText: string;
-  onButtonClick: () => void;
-}
-
 export interface InputProps {
   type?: string;
   value: string;
