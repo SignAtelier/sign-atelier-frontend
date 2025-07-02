@@ -1,15 +1,11 @@
-import Button from "./Button";
 import logo from "../../assets/signLogo.png";
+import Button from "./Button";
+import type { HeaderProps } from "./types";
 
 const headerClass = `
   flex justify-between items-center
   px-6 py-4 bg-white shadow-md
 `;
-
-interface HeaderProps {
-  buttonText: string;
-  onButtonClick: () => void;
-}
 
 const Header = ({ buttonText, onButtonClick }: HeaderProps) => {
   return (

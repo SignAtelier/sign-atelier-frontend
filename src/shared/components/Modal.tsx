@@ -1,13 +1,6 @@
-import { type ReactNode } from "react";
-import Button from "./Button";
 import { IoCloseOutline } from "react-icons/io5";
-
-interface ModalProps {
-  children: ReactNode;
-  onClick: () => void;
-  onClose: () => void;
-  buttonText?: string;
-}
+import Button from "./Button";
+import type { ModalProps } from "./types";
 
 const Modal = ({
   children,

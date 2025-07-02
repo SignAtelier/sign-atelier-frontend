@@ -1,15 +1,8 @@
-import { type ChangeEventHandler } from "react";
+import type { InputProps } from "./types";
 
 const inputClass = `
   flex-grow border border-gray-500 rounded-md px-3 py-3 focus:outline-[#3a5afe]
 `;
-
-interface InputProps {
-  type?: string;
-  value: string;
-  onChange: ChangeEventHandler<HTMLInputElement>;
-  placeholder: string;
-}
 
 const Input = ({ type = "text", value, onChange, placeholder }: InputProps) => {
   return (
