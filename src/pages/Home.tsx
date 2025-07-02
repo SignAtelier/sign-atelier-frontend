@@ -18,7 +18,7 @@ const Home = () => {
 
       <div className="py-20">
         <p className={titleClass}>나만의 사인을 만들고</p>
-        <p className={titleClass}> 따라 쓰며 연습하는 싸인공방</p>
+        <p className={titleClass}>따라 쓰며 연습하는 싸인공방</p>
       </div>
       <div className="flex flex-col items-center gap-8">
         <div className="w-1/2">
