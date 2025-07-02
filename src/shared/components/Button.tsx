@@ -1,9 +1,14 @@
 import type { ButtonProps } from "./types";
 
-const Button = ({ children, onClick, disabled = false }: ButtonProps) => {
+const Button = ({
+  children,
+  onClick,
+  disabled = false,
+  style = "bg-[#3a5afe] text-white",
+}: ButtonProps) => {
   return (
     <button
-      className="text-white border w-full py-3 rounded-lg bg-[#3a5afe] cursor-pointer"
+      className={`border w-full py-3 rounded-lg  cursor-pointer ${style}`}
       onClick={onClick}
       disabled={disabled}
     >
