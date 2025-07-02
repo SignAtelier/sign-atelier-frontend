@@ -1,4 +1,5 @@
 import ImageUploader from "../features/ImageUpload/ImageUploader";
+import LoginModal from "../features/auth/LoginModal";
 import Button from "../shared/components/Button";
 import Header from "../shared/components/Header";
 import Input from "../shared/components/Input";
@@ -7,10 +8,14 @@ const titleClass = `
   text-3xl p-2 font-black
 `;
 
+const modal = true;
+
 const Home = () => {
   return (
     <div className="size-full">
       <Header buttonText="로그인" onButtonClick={() => {}} />
+      {modal && <LoginModal />}
+
       <div className="py-20">
         <p className={titleClass}>나만의 사인을 만들고</p>
         <p className={titleClass}> 따라 쓰며 연습하는 싸인공방</p>
