@@ -5,6 +5,7 @@ export interface ButtonProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
   style?: string;
+  padding?: string;
 }
 
 export interface InputProps {

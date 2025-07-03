@@ -5,10 +5,11 @@ const Button = ({
   onClick,
   disabled = false,
   style = "bg-[#3a5afe] text-white",
+  padding = "py-3",
 }: ButtonProps) => {
   return (
     <button
-      className={`border w-full py-3 rounded-lg  cursor-pointer ${style}`}
+      className={`border w-full rounded-lg cursor-pointer ${style} ${padding}`}
       onClick={onClick}
       disabled={disabled}
     >
