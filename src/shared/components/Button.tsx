@@ -5,7 +5,7 @@ const Button = ({
   onClick,
   disabled = false,
   style = "bg-[#3a5afe] text-white",
-  padding = "py-3",
+  padding = "py-2",
 }: ButtonProps) => {
   return (
     <button
