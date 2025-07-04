@@ -1,15 +1,15 @@
-import { type ReactNode, type MouseEventHandler } from "react";
+import type { ButtonProps } from "./types";
 
-interface ButtonProps {
-  children: ReactNode;
-  onClick: MouseEventHandler<HTMLButtonElement>;
-  disabled?: boolean;
-}
-
-const Button = ({ children, onClick, disabled = false }: ButtonProps) => {
+const Button = ({
+  children,
+  onClick,
+  disabled = false,
+  style = "bg-[#3a5afe] text-white",
+  padding = "py-2",
+}: ButtonProps) => {
   return (
     <button
-      className="text-white border w-full"
+      className={`border w-full rounded-lg cursor-pointer ${style} ${padding}`}
       onClick={onClick}
       disabled={disabled}
     >

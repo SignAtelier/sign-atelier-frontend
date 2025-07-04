@@ -1,29 +1,18 @@
-import { type ReactNode } from "react";
-import Button from "./Button";
 import { IoCloseOutline } from "react-icons/io5";
+import type { ModalProps } from "./types";
 
-interface ModalProps {
-  children: ReactNode;
-  onClick: () => void;
-  onClose: () => void;
-  buttonText?: string;
-}
-
-const Modal = ({
-  children,
-  onClick,
-  onClose,
-  buttonText = "확인",
-}: ModalProps) => {
+const Modal = ({ children, onClose }: ModalProps) => {
   return (
-    <div className="fixed inset-0 z-50 flex justify-center items-center bg-slate-200 bg-opacity-50">
-      <div className="py-4 px-6 bg-white rounded-md relative space-y-4">
-        <IoCloseOutline
-          className="absolute top-2 right-2 text-2xl cursor-pointer"
-          onClick={onClose}
-        />
+    <div className="fixed inset-0 z-50 flex justify-center items-center">
+      <div className="absolute inset-0 bg-black opacity-40" />
+      <div className="relative py-4 px-6 bg-white rounded-md space-y-4 z-10">
+        <div className="flex justify-end">
+          <IoCloseOutline
+            className="text-2xl cursor-pointer"
+            onClick={onClose}
+          />
+        </div>
         {children}
-        <Button onClick={onClick}>{buttonText}</Button>
       </div>
     </div>
   );
