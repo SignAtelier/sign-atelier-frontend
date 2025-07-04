@@ -1,5 +1,5 @@
-import ImageUploader from "../features/ImageUpload/ImageUploader";
 import LoginModal from "../features/auth/LoginModal";
+import ImageUploader from "../features/imageUpload/ImageUploader";
 import Button from "../shared/components/Button";
 import Header from "../shared/components/Header";
 import Input from "../shared/components/Input";
@@ -8,7 +8,7 @@ const titleClass = `
   text-3xl p-2 font-black
 `;
 
-const modal = true;
+const modal = false;
 
 const Home = () => {
   return (
