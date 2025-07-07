@@ -1,11 +1,20 @@
 import googleLoginBtn from "../../assets/google_login_btn.png";
 import Modal from "../../shared/components/Modal";
+import type { LoginModalProps } from "./types";
 
-const LoginModal = () => {
+const LoginModal = ({ onClose }: LoginModalProps) => {
+  const handleLogin = () => {
+    window.location.href = "http://localhost:8000/api/auth/login";
+  };
+
   return (
-    <Modal onClose={() => {}}>
+    <Modal onClose={onClose}>
       <div className="text-lg font-bold">로그인</div>
-      <img src={googleLoginBtn} className="cursor-pointer" />
+      <img
+        src={googleLoginBtn}
+        className="cursor-pointer"
+        onClick={() => handleLogin()}
+      />
     </Modal>
   );
 };
