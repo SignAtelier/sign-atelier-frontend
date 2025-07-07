@@ -1,4 +1,5 @@
-import signLogo from "../assets/signLogo.png";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { saveSign } from "../apis/saveSign";
 import Button from "../shared/components/Button";
 import Header from "../shared/components/Header";
 
@@ -7,6 +8,10 @@ const centerClass = `
 `;
 
 const SignatureResult = () => {
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const signUrl = params.get("signUrl");
+
   return (
     <div className="size-full">
       <Header />
@@ -17,8 +22,20 @@ const SignatureResult = () => {
       <div className={centerClass}>
         <div className="w-1/3">
           <div className={centerClass}>
-            <img src={signLogo} alt="싸인" />
-            <Button onClick={() => {}}>저장하고 연습하기</Button>
+            {signUrl ? <img src={signUrl} alt="싸인" /> : <p>싸인 생성중...</p>}
+            <Button
+              onClick={async () => {
+                if (!signUrl) return;
+
+                const status = await saveSign(signUrl);
+
+                if (status === 200) {
+                  navigate("/signature/list");
+                }
+              }}
+            >
+              저장하고 연습하기
+            </Button>
             <Button onClick={() => {}} style="bg-[#white] text-black">
               다시 생성하기
             </Button>
