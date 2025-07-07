@@ -1,5 +1,10 @@
+import { useState } from "react";
 import logo from "../../assets/signLogo.png";
+import LoginModal from "../../features/auth/LoginModal";
+import Profile from "../../features/auth/Profile";
+import { useUserStore } from "../../store/userStore";
 import Button from "./Button";
+import UserMenu from "./UserMenu";
 
 const headerClass = `
   flex justify-between items-center
@@ -7,12 +12,28 @@ const headerClass = `
 `;
 
 const Header = () => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+  const { userInfo } = useUserStore();
+
   return (
     <header className={headerClass}>
+      {isModalOpen && <LoginModal onClose={() => setIsModalOpen(false)} />}
       <img src={logo} alt="싸인공방" className="w-32 h-auto" />
-      <div className="w-24">
-        <Button onClick={() => {}}>로그인</Button>
-      </div>
+      {userInfo ? (
+        <div className="relative">
+          <Profile
+            profilePicture={userInfo.profilePicture}
+            onToggleMenu={() => setIsMenuOpen(!isMenuOpen)}
+          />
+          {isMenuOpen && <UserMenu onCloseMenu={() => setIsMenuOpen(false)} />}
+        </div>
+      ) : (
+        <div className="w-24">
+          <Button onClick={() => setIsModalOpen(true)}>로그인</Button>
+        </div>
+      )}
     </header>
   );
 };
