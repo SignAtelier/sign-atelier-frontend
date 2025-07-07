@@ -1,20 +1,25 @@
-import LoginModal from "../features/auth/LoginModal";
+import { useEffect } from "react";
+import { getUserInfo } from "../apis/auth";
 import ImageUploader from "../features/ImageUpload/ImageUploader";
 import Button from "../shared/components/Button";
 import Header from "../shared/components/Header";
 import Input from "../shared/components/Input";
+import { useUserStore } from "../store/userStore";
 
 const titleClass = `
   text-3xl p-2 font-black
 `;
 
-const modal = false;
-
 const Home = () => {
+  const { setUserInfo } = useUserStore();
+
+  useEffect(() => {
+    getUserInfo(setUserInfo);
+  }, []);
+
   return (
     <div className="size-full">
       <Header />
-      {modal && <LoginModal />}
 
       <div className="py-20">
         <p className={titleClass}>나만의 사인을 만들고</p>
@@ -26,9 +31,15 @@ const Home = () => {
         </div>
 
         <div className="flex gap-4 w-1/2">
-          <Input onChange={() => {}} placeholder="이름을 입력하세요" value="" />
+          <Input
+            onChange={() => {}}
+            placeholder="이름을 입력하세요"
+            value={""}
+          />
           <div className="w-24">
-            <Button onClick={() => {}}>생성</Button>
+            <Button onClick={() => {}} padding="py-3">
+              생성
+            </Button>
           </div>
         </div>
       </div>
