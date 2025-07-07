@@ -1,7 +1,14 @@
+import type { ChangeEvent } from "react";
 import { FaUpload } from "react-icons/fa6";
-import { type ImageUploaderProps } from "./types";
+import type { ImageUploaderProps } from "./types";
 
-const ImageUploader = ({ file, onFileChange }: ImageUploaderProps) => {
+const ImageUploader = ({ file, setFile }: ImageUploaderProps) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <label htmlFor="file-upload">
@@ -16,7 +23,7 @@ const ImageUploader = ({ file, onFileChange }: ImageUploaderProps) => {
             <>
               <FaUpload size="3em" color="#3a5afe" />
               <span className="text-sm">지원 확장자 : JPG, JPEG, PNG</span>
-              <div>원하는 스타일의 싸인을 선택해주세요</div>
+              <div>원하는 스타일의 싸인을 업로드 해주세요</div>
               <span className="text-[#3a5afe] font-bold">
                 드래그 앤 드롭 또는 클릭
               </span>
@@ -29,7 +36,7 @@ const ImageUploader = ({ file, onFileChange }: ImageUploaderProps) => {
         accept=".png, .jpg, .jpeg"
         className="hidden"
         id="file-upload"
-        onChange={onFileChange}
+        onChange={handleFileChange}
       />
     </div>
   );

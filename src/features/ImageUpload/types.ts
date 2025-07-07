@@ -1,6 +1,6 @@
-import { type ChangeEvent } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 export interface ImageUploaderProps {
   file: File | null;
-  onFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  setFile: Dispatch<SetStateAction<File | null>>;
 }
