@@ -29,7 +29,7 @@ const SignatureResult = () => {
 
                 const status = await saveSign(signUrl);
 
-                if (status === 200) {
+                if (status === 201) {
                   navigate("/signature/list");
                 }
               }}
