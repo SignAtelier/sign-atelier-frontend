@@ -1,4 +1,4 @@
-import axios from "axios";
+import authAxios from "./axios";
 
 export const saveSign = async (url: string) => {
   try {
@@ -9,9 +9,8 @@ export const saveSign = async (url: string) => {
 
     formData.append("temp_file_name", key);
 
-    const response = await axios.post("/api/signs", formData, {
+    const response = await authAxios.post("/api/signs", formData, {
       headers: { "Content-Type": "multipart/form-data" },
-      withCredentials: true,
     });
 
     return response.data.status;
@@ -24,9 +23,7 @@ export const saveSign = async (url: string) => {
 
 export const getSigns = async () => {
   try {
-    const response = await axios.get("/api/signs/list", {
-      withCredentials: true,
-    });
+    const response = await authAxios.get("/api/signs/list");
 
     return response.data.signs;
   } catch (error: any) {
@@ -43,9 +40,7 @@ export const editSignName = async (signId: string, newName: string) => {
     formData.append("sign_id", signId.toString());
     formData.append("new_name", newName);
 
-    const response = await axios.patch("/api/signs/name", formData, {
-      withCredentials: true,
-    });
+    const response = await authAxios.patch("/api/signs/name", formData);
 
     return response.data.editedSign;
   } catch (error: any) {

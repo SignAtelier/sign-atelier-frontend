@@ -15,14 +15,15 @@ const titleClass = `
 const Home = () => {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState<string>("");
-
-  const { setUserInfo } = useUserStore();
+  const { initialized } = useUserStore();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    getUserInfo(setUserInfo);
-  }, []);
+    if (!initialized) {
+      getUserInfo();
+    }
+  }, [initialized]);
 
   return (
     <div className="size-full">

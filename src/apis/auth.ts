@@ -1,21 +1,25 @@
-import axios from "axios";
-import type { User } from "../store/userStore";
+import { useUserStore } from "../store/userStore";
+import authAxios from "./axios";
 
-export const getUserInfo = async (setUserInfo: (user: User) => void) => {
+export const getUserInfo = async () => {
+  const store = useUserStore.getState();
+
   try {
-    const response = await axios.get("/api/users/me", {
-      withCredentials: true,
-    });
+    const response = await authAxios.get("/api/users/me");
 
     const { social_id, profile } = response.data;
     const user = { socialId: social_id, profilePicture: profile };
 
-    setUserInfo(user);
+    store.setUserInfo(user);
   } catch (error: any) {
     const data = error.response?.data;
 
-    if (data.code === "NO_TOKEN") return;
-
-    alert(data.message);
+    if (data.code === "NO_TOKEN" || data.code === "TOKEN_INVALID") {
+      store.setUserInfo(null);
+    } else {
+      alert(data.message);
+    }
+  } finally {
+    store.setInitialized();
   }
 };
