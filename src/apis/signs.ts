@@ -35,3 +35,22 @@ export const getSigns = async () => {
     alert(message);
   }
 };
+
+export const editSignName = async (signId: string, newName: string) => {
+  try {
+    const formData = new FormData();
+
+    formData.append("sign_id", signId.toString());
+    formData.append("new_name", newName);
+
+    const response = await axios.patch("/api/signs/name", formData, {
+      withCredentials: true,
+    });
+
+    return response.data.editedSign;
+  } catch (error: any) {
+    const message = error.response?.data?.message;
+
+    alert(message);
+  }
+};

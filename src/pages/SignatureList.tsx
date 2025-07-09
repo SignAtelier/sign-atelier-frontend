@@ -12,8 +12,26 @@ interface Sign {
   isDeleted: boolean;
 }
 
+interface newSign {
+  id: string;
+  name: string;
+  udpatedAt: string;
+}
+
 const SignatureList = () => {
   const [signs, setSigns] = useState<Sign[]>();
+
+  const handleSignUpdate = (newSign: newSign) => {
+    setSigns((prev) =>
+      prev?.map((sign) => {
+        if (sign.id === newSign.id) {
+          return { ...sign, name: newSign.name };
+        }
+
+        return sign;
+      })
+    );
+  };
 
   useEffect(() => {
     (async () => {
@@ -34,7 +52,11 @@ const SignatureList = () => {
           <>
             <div className="grid grid-cols-5 grid-rows-3 gap-5">
               {signs.map((sign) => (
-                <SignCard key={sign.id} sign={sign} />
+                <SignCard
+                  key={sign.id}
+                  sign={sign}
+                  onUpdate={handleSignUpdate}
+                />
               ))}
             </div>
           </>

@@ -7,8 +7,15 @@ interface Sign {
   isDeleted: boolean;
 }
 
+interface newSign {
+  id: string;
+  name: string;
+  udpatedAt: string;
+}
+
 export interface SignProps {
   sign: Sign;
+  onUpdate: (newSign: newSign) => void;
 }
 
 export interface ToggleSwitchProps {
