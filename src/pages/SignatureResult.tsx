@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { saveSign } from "../apis/saveSign";
+import { saveSign } from "../apis/signs";
 import Button from "../shared/components/Button";
 import Header from "../shared/components/Header";
 

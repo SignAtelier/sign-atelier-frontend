@@ -1,8 +1,8 @@
 interface Sign {
   id: number;
-  img: string;
-  name: string;
+  url: string;
   createdAt: string;
+  isDeleted: boolean;
 }
 
 export interface SignProps {

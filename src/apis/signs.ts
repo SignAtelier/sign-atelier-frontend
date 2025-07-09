@@ -21,3 +21,17 @@ export const saveSign = async (url: string) => {
     alert(message);
   }
 };
+
+export const getSigns = async () => {
+  try {
+    const response = await axios.get("/api/signs/list", {
+      withCredentials: true,
+    });
+
+    return response.data.signs;
+  } catch (error: any) {
+    const message = error.response?.data?.message;
+
+    alert(message);
+  }
+};
