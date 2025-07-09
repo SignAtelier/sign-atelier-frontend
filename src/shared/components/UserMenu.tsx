@@ -1,15 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "../../store/userStore";
+import { logout } from "../../apis/auth";
 import type { UserMenuProps } from "./types";
 
 const UserMenu = ({ onCloseMenu }: UserMenuProps) => {
   const navigate = useNavigate();
 
-  const clearUserInfo = useUserStore((state) => state.clearUserInfo);
-
   const handleLogout = async () => {
-    clearUserInfo();
-    navigate("/");
+    await logout();
   };
 
   return (

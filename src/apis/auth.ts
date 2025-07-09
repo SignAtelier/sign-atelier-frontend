@@ -23,3 +23,17 @@ export const getUserInfo = async () => {
     store.setInitialized();
   }
 };
+
+export const logout = async () => {
+  try {
+    await authAxios.post("/api/auth/logout");
+
+    const store = useUserStore.getState();
+
+    store.clearAll();
+
+    window.location.href = "/";
+  } catch (error) {
+    alert("로그아웃에 실패했습니다.");
+  }
+};
