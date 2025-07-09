@@ -3,8 +3,17 @@ import { getSigns } from "../apis/signs";
 import SignCard from "../features/sign/SignCard";
 import Header from "../shared/components/Header";
 
+interface Sign {
+  id: string;
+  url: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: boolean;
+}
+
 const SignatureList = () => {
-  const [signs, setSigns] = useState<any[]>();
+  const [signs, setSigns] = useState<Sign[]>();
 
   useEffect(() => {
     (async () => {

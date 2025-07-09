@@ -1,7 +1,9 @@
 interface Sign {
-  id: number;
+  id: string;
   url: string;
+  name: string;
   createdAt: string;
+  updatedAt: string;
   isDeleted: boolean;
 }
 
