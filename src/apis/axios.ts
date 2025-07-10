@@ -5,6 +5,19 @@ const authAxios: AxiosInstance = axios.create({
   withCredentials: true,
 });
 
+authAxios.interceptors.request.use(
+  (config) => {
+    const token = useUserStore.getState().accessToken;
+
+    config.headers.Authorization = `Bearer ${token}`;
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 authAxios.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -14,15 +27,19 @@ authAxios.interceptors.response.use(
       originalConfig._retry = true;
 
       try {
-        await axios.post("/api/auth/refresh", null, {
+        const refeshResponse = await axios.post("/api/auth/refresh", null, {
           withCredentials: true,
         });
 
+        const newAccessToken = refeshResponse.data.accessToken;
+
+        useUserStore.getState().setAccessToken(newAccessToken);
+
+        originalConfig.headers.Authorization = `Bearer ${newAccessToken}`;
+
         return authAxios(originalConfig);
       } catch {
-        const store = useUserStore.getState();
-
-        store.clearAll();
+        useUserStore.getState().clearAll();
         window.location.href = "/";
       }
     }

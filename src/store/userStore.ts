@@ -3,17 +3,18 @@ import { persist } from "zustand/middleware";
 
 export interface User {
   socialId: string;
+  provider: string;
   profilePicture: string;
 }
 
 interface UserState {
   userInfo: User | null;
-  initialized: boolean;
+  accessToken: string | null;
 }
 
 interface UserActions {
   setUserInfo: (user: User | null) => void;
-  setInitialized: () => void;
+  setAccessToken: (token: string | null) => void;
   clearAll: () => void;
 }
 
@@ -21,16 +22,16 @@ export const useUserStore = create<UserState & UserActions>()(
   persist(
     (set) => ({
       userInfo: null,
-      initialized: false,
+      accessToken: null,
       setUserInfo: (user) => set({ userInfo: user }),
-      setInitialized: () => set({ initialized: true }),
-      clearAll: () => set({ userInfo: null, initialized: false }),
+      setAccessToken: (token) => set({ accessToken: token }),
+      clearAll: () => set({ userInfo: null, accessToken: null }),
     }),
     {
       name: "user-storage",
       partialize: (state) => ({
         userInfo: state.userInfo,
-        initialized: state.initialized,
+        accessToken: state.accessToken,
       }),
     }
   )

@@ -9,9 +9,7 @@ export const saveSign = async (url: string) => {
 
     formData.append("temp_file_name", key);
 
-    const response = await authAxios.post("/api/signs", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const response = await authAxios.post("/api/signs/upload", formData);
 
     return response.data.status;
   } catch (error: any) {

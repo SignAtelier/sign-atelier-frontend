@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUserInfo } from "../apis/auth";
+import { getAccessToken, getUserInfo } from "../apis/auth";
 import { generateSign } from "../apis/generateSign";
 import ImageUploader from "../features/ImageUpload/ImageUploader";
 import Button from "../shared/components/Button";
@@ -15,15 +15,32 @@ const titleClass = `
 const Home = () => {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState<string>("");
-  const { initialized } = useUserStore();
+
+  const { accessToken } = useUserStore();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!initialized) {
-      getUserInfo();
-    }
-  }, [initialized]);
+    (async () => {
+      const store = useUserStore.getState();
+
+      if (!accessToken) {
+        const token = await getAccessToken();
+
+        if (!token) {
+          store.clearAll();
+
+          return;
+        }
+
+        store.setAccessToken(token);
+      }
+
+      const userInfo = await getUserInfo();
+
+      if (userInfo) store.setUserInfo(userInfo);
+    })();
+  }, [accessToken]);
 
   return (
     <div className="size-full">

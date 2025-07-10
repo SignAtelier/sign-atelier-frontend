@@ -7,6 +7,7 @@ const UserMenu = ({ onCloseMenu }: UserMenuProps) => {
 
   const handleLogout = async () => {
     await logout();
+    navigate("/");
   };
 
   return (
