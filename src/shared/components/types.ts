@@ -23,3 +23,7 @@ export interface ModalProps {
 export interface UserMenuProps {
   onCloseMenu: () => void;
 }
+
+export interface LoadingProps {
+  children: ReactNode;
+}
