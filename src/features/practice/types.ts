@@ -1,3 +1,5 @@
+import type { RefObject } from "react";
+
 export interface PracticeSignListProps {
   signList: { id: number; img: string }[];
   onSelect?: (id: number) => void;
@@ -9,10 +11,7 @@ export interface DownloadModalProps {
 }
 
 export interface PracticeCanvasProps {
-  canvasWidth: number;
-  canvasHeight: number;
-  onReset: () => void;
-  onSave: () => void;
+  title: string;
 }
 
 export interface SignBoxProps {
@@ -22,4 +21,14 @@ export interface SignBoxProps {
   showOutline: boolean;
   onToggleImage: () => void;
   onToggleOutline: () => void;
+}
+
+export interface Point {
+  x: number;
+  y: number;
+}
+
+export interface CanvasProps {
+  size: number;
+  canvasRef: RefObject<HTMLCanvasElement | null>;
 }

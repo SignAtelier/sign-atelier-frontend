@@ -43,19 +43,14 @@ const Practice = () => {
       <div className="px-10 pt-10 flex justify-center">
         <div className="flex border w-fit rounded-2xl shadow-xl border-gray-300 bg-white p-8 gap-12">
           <SignBox
-            title="AI 생성 사인"
+            title="만든 싸인"
             imageSrc={signLogo}
             showImage={true}
             showOutline={false}
             onToggleImage={() => {}}
             onToggleOutline={() => {}}
           />
-          <PracticeCanvas
-            canvasWidth={256}
-            canvasHeight={128}
-            onReset={() => {}}
-            onSave={() => {}}
-          />
+          <PracticeCanvas title="연습 캔버스" />
         </div>
       </div>
       <PracticeSignList signList={signList} />
