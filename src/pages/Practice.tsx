@@ -1,41 +1,16 @@
+import { useState } from "react";
 import signLogo from "../assets/signLogo.png";
 import DownloadModal from "../features/practice/DownloadModal";
 import PracticeCanvas from "../features/practice/PracticeCanvas";
-import PracticeSignList from "../features/practice/PracticeSignList";
+import PracticeRecords from "../features/practice/PracticeRecords";
 import SignBox from "../features/practice/SignBox";
 import Header from "../shared/components/Header";
-
-const signList = [
-  { id: 1, img: signLogo },
-  { id: 2, img: signLogo },
-  { id: 3, img: signLogo },
-  { id: 4, img: signLogo },
-  { id: 5, img: signLogo },
-  { id: 6, img: signLogo },
-  { id: 7, img: signLogo },
-  { id: 8, img: signLogo },
-  { id: 9, img: signLogo },
-  { id: 10, img: signLogo },
-  { id: 11, img: signLogo },
-  { id: 12, img: signLogo },
-  { id: 13, img: signLogo },
-  { id: 14, img: signLogo },
-  { id: 15, img: signLogo },
-  { id: 16, img: signLogo },
-  { id: 17, img: signLogo },
-  { id: 18, img: signLogo },
-  { id: 19, img: signLogo },
-  { id: 20, img: signLogo },
-  { id: 21, img: signLogo },
-  { id: 22, img: signLogo },
-  { id: 23, img: signLogo },
-  { id: 24, img: signLogo },
-  { id: 25, img: signLogo },
-];
 
 const isModal = false;
 
 const Practice = () => {
+  const [practices, setPractices] = useState([]);
+
   return (
     <div className="size-full">
       <Header />
@@ -53,7 +28,7 @@ const Practice = () => {
           <PracticeCanvas title="연습 캔버스" />
         </div>
       </div>
-      <PracticeSignList signList={signList} />
+      <PracticeRecords practices={practices} />
       {isModal && <DownloadModal onClose={() => {}} imgSrc="sign" />}
     </div>
   );

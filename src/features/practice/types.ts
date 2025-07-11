@@ -1,8 +1,8 @@
 import type { RefObject } from "react";
 
-export interface PracticeSignListProps {
-  signList: { id: number; img: string }[];
-  onSelect?: (id: number) => void;
+export interface PracticeRecordsProps {
+  practices: { id: string; fileName: string }[];
+  onSelect?: (id: string) => void;
 }
 
 export interface DownloadModalProps {
