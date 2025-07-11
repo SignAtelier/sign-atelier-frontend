@@ -12,7 +12,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signature/result" element={<SignatureResult />} />
         <Route path="/signature/list" element={<SignatureList />} />
-        <Route path="/signature/practice" element={<Practice />} />
+        <Route path="/signature/practice/:sign_id" element={<Practice />} />
       </Routes>
     </Router>
   );

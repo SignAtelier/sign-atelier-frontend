@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MdModeEdit } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import { editSignName } from "../../apis/signs";
 import Button from "../../shared/components/Button";
 import Input from "../../shared/components/Input";
@@ -10,6 +11,8 @@ import type { SignProps } from "./types";
 const SignCard = ({ sign, onUpdate }: SignProps) => {
   const [editing, setEditing] = useState<boolean>(false);
   const [name, setName] = useState("");
+
+  const navigate = useNavigate();
 
   const openEditModal = () => {
     setName(sign.name);
@@ -30,7 +33,7 @@ const SignCard = ({ sign, onUpdate }: SignProps) => {
   return (
     <div className="flex flex-col items-center justify-center border rounded-md border-gray-200 p-4">
       <div className="w-30 pb-6 flex items-center justify-center overflow-clip">
-        <img src={sign.url} alt={`sign_${sign.id}`} key={sign.id} />
+        <img src={sign.url} alt={`sign_${sign.name}`} key={sign.id} />
       </div>
 
       <div className="flex flex-col items-start w-full">
@@ -43,7 +46,9 @@ const SignCard = ({ sign, onUpdate }: SignProps) => {
 
         <span className="text-sm pb-4">생성: {formatDate(sign.createdAt)}</span>
 
-        <Button padding="py-1" onClick={() => {}}>
+        <Button padding="py-1" onClick={() => {
+          navigate(`/signature/practice/${sign.id}`)
+        }}>
           연습하기
         </Button>
       </div>
