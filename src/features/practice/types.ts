@@ -1,7 +1,15 @@
 import type { RefObject } from "react";
 
+export interface Practice {
+  id: string;
+  fileName: string;
+  createdAt: string;
+  updatedAt: string;
+  url: string;
+}
+
 export interface PracticeRecordsProps {
-  practices: { id: string; fileName: string }[];
+  practices: Practice[];
   onSelect?: (id: string) => void;
 }
 

@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getPractices, getPresignedUrl } from "../apis/practice";
+import type { Practice } from "../apis/types";
 import signLogo from "../assets/signLogo.png";
 import DownloadModal from "../features/practice/DownloadModal";
 import PracticeCanvas from "../features/practice/PracticeCanvas";
@@ -9,7 +12,23 @@ import Header from "../shared/components/Header";
 const isModal = false;
 
 const Practice = () => {
-  const [practices, setPractices] = useState([]);
+  const [practices, setPractices] = useState<Practice[]>([]);
+  const { sign_id } = useParams();
+  const signId = sign_id;
+
+  useEffect(() => {
+    if (!signId) return;
+
+    (async () => {
+      const practicesList = await getPractices(signId);
+
+      if (practicesList.length === 0) return;
+
+      const finalPractices = await getPresignedUrl(practicesList);
+
+      setPractices(finalPractices);
+    })();
+  }, []);
 
   return (
     <div className="size-full">
