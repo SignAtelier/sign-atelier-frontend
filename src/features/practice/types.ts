@@ -1,4 +1,12 @@
-import type { RefObject } from "react";
+import type { Dispatch, RefObject, SetStateAction } from "react";
+
+export interface Practice {
+  id: string;
+  fileName: string;
+  createdAt: string;
+  updatedAt: string;
+  url: string;
+}
 
 export interface Practice {
   id: string;
@@ -20,6 +28,8 @@ export interface DownloadModalProps {
 
 export interface PracticeCanvasProps {
   title: string;
+  practices: Practice[];
+  setPractices: Dispatch<SetStateAction<Practice[]>>;
 }
 
 export interface SignBoxProps {
