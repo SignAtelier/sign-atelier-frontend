@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPractices, getPresignedUrl } from "../apis/practice";
-import type { Practice } from "../apis/types";
 import signLogo from "../assets/signLogo.png";
 import DownloadModal from "../features/practice/DownloadModal";
 import PracticeCanvas from "../features/practice/PracticeCanvas";
 import PracticeRecords from "../features/practice/PracticeRecords";
 import SignBox from "../features/practice/SignBox";
+import type { Practice } from "../features/practice/types";
 import Header from "../shared/components/Header";
 
 const isModal = false;
@@ -24,9 +24,16 @@ const Practice = () => {
 
       if (practicesList.length === 0) return;
 
-      const finalPractices = await getPresignedUrl(practicesList);
+      const keys = practicesList.map((practice: Practice) => practice.fileName);
+      const urls = await getPresignedUrl(keys);
+      const updatedPractices = practicesList.map(
+        (practice: Practice, i: number) => ({
+          ...practice,
+          url: urls[i],
+        })
+      );
 
-      setPractices(finalPractices);
+      setPractices(updatedPractices);
     })();
   }, []);
 
@@ -44,7 +51,11 @@ const Practice = () => {
             onToggleImage={() => {}}
             onToggleOutline={() => {}}
           />
-          <PracticeCanvas title="연습 캔버스" />
+          <PracticeCanvas
+            title="연습 캔버스"
+            practices={practices}
+            setPractices={setPractices}
+          />
         </div>
       </div>
       <PracticeRecords practices={practices} />

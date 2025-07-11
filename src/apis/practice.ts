@@ -1,5 +1,4 @@
 import authAxios from "./axios";
-import type { Practice } from "./types";
 
 export const uploadPractice = async (file: File, signId: string) => {
   try {
@@ -36,22 +35,14 @@ export const getPractices = async (signId: string) => {
   }
 };
 
-export const getPresignedUrl = async (practices: Practice[]) => {
+export const getPresignedUrl = async (keys: string[]) => {
   try {
-    const keys = practices.map((practice) => practice.fileName);
     const response = await authAxios.post("/api/s3/presigned", keys);
-    const urls = response.data;
-    const updatedPractices = practices.map((practice, i) => ({
-      ...practice,
-      url: urls[i],
-    }));
 
-    return updatedPractices;
+    return response.data;
   } catch (error: any) {
     const message = error.response?.data?.message;
 
     alert(message);
-
-    return practices;
   }
 };
