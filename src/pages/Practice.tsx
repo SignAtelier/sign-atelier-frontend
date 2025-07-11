@@ -1,41 +1,42 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getPractices, getPresignedUrl } from "../apis/practice";
 import signLogo from "../assets/signLogo.png";
 import DownloadModal from "../features/practice/DownloadModal";
 import PracticeCanvas from "../features/practice/PracticeCanvas";
-import PracticeSignList from "../features/practice/PracticeSignList";
+import PracticeRecords from "../features/practice/PracticeRecords";
 import SignBox from "../features/practice/SignBox";
+import type { Practice } from "../features/practice/types";
 import Header from "../shared/components/Header";
-
-const signList = [
-  { id: 1, img: signLogo },
-  { id: 2, img: signLogo },
-  { id: 3, img: signLogo },
-  { id: 4, img: signLogo },
-  { id: 5, img: signLogo },
-  { id: 6, img: signLogo },
-  { id: 7, img: signLogo },
-  { id: 8, img: signLogo },
-  { id: 9, img: signLogo },
-  { id: 10, img: signLogo },
-  { id: 11, img: signLogo },
-  { id: 12, img: signLogo },
-  { id: 13, img: signLogo },
-  { id: 14, img: signLogo },
-  { id: 15, img: signLogo },
-  { id: 16, img: signLogo },
-  { id: 17, img: signLogo },
-  { id: 18, img: signLogo },
-  { id: 19, img: signLogo },
-  { id: 20, img: signLogo },
-  { id: 21, img: signLogo },
-  { id: 22, img: signLogo },
-  { id: 23, img: signLogo },
-  { id: 24, img: signLogo },
-  { id: 25, img: signLogo },
-];
 
 const isModal = false;
 
 const Practice = () => {
+  const [practices, setPractices] = useState<Practice[]>([]);
+  const { sign_id } = useParams();
+  const signId = sign_id;
+
+  useEffect(() => {
+    if (!signId) return;
+
+    (async () => {
+      const practicesList = await getPractices(signId);
+
+      if (practicesList.length === 0) return;
+
+      const keys = practicesList.map((practice: Practice) => practice.fileName);
+      const urls = await getPresignedUrl(keys);
+      const updatedPractices = practicesList.map(
+        (practice: Practice, i: number) => ({
+          ...practice,
+          url: urls[i],
+        })
+      );
+
+      setPractices(updatedPractices);
+    })();
+  }, []);
+
   return (
     <div className="size-full">
       <Header />
@@ -50,10 +51,14 @@ const Practice = () => {
             onToggleImage={() => {}}
             onToggleOutline={() => {}}
           />
-          <PracticeCanvas title="연습 캔버스" />
+          <PracticeCanvas
+            title="연습 캔버스"
+            practices={practices}
+            setPractices={setPractices}
+          />
         </div>
       </div>
-      <PracticeSignList signList={signList} />
+      <PracticeRecords practices={practices} />
       {isModal && <DownloadModal onClose={() => {}} imgSrc="sign" />}
     </div>
   );

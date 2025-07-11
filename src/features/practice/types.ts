@@ -1,8 +1,24 @@
-import type { RefObject } from "react";
+import type { Dispatch, RefObject, SetStateAction } from "react";
 
-export interface PracticeSignListProps {
-  signList: { id: number; img: string }[];
-  onSelect?: (id: number) => void;
+export interface Practice {
+  id: string;
+  fileName: string;
+  createdAt: string;
+  updatedAt: string;
+  url: string;
+}
+
+export interface Practice {
+  id: string;
+  fileName: string;
+  createdAt: string;
+  updatedAt: string;
+  url: string;
+}
+
+export interface PracticeRecordsProps {
+  practices: Practice[];
+  onSelect?: (id: string) => void;
 }
 
 export interface DownloadModalProps {
@@ -12,6 +28,8 @@ export interface DownloadModalProps {
 
 export interface PracticeCanvasProps {
   title: string;
+  practices: Practice[];
+  setPractices: Dispatch<SetStateAction<Practice[]>>;
 }
 
 export interface SignBoxProps {

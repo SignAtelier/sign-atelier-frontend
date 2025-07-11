@@ -1,11 +1,15 @@
 import { useRef } from "react";
 import { useParams } from "react-router-dom";
-import { uploadPractice } from "../../apis/practice";
+import { getPresignedUrl, uploadPractice } from "../../apis/practice";
 import Button from "../../shared/components/Button";
 import Canvas from "./Canvas";
 import type { PracticeCanvasProps } from "./types";
 
-const PracticeCanvas = ({ title }: PracticeCanvasProps) => {
+const PracticeCanvas = ({
+  title,
+  practices,
+  setPractices,
+}: PracticeCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { sign_id } = useParams();
   const signId = sign_id;
@@ -40,7 +44,11 @@ const PracticeCanvas = ({ title }: PracticeCanvasProps) => {
 
     canvasRef.current.toBlob(async (blob) => {
       const file = new File([blob!], "practice.png", { type: "png" });
-      const fileName = await uploadPractice(file, signId);
+      const practice = await uploadPractice(file, signId);
+      const url = await getPresignedUrl([practice.fileName]);
+
+      practice.url = url;
+      setPractices([practice, ...practices]);
     });
 
     handleClear();

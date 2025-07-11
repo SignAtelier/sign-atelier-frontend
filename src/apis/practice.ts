@@ -20,3 +20,29 @@ export const uploadPractice = async (file: File, signId: string) => {
     alert(message);
   }
 };
+
+export const getPractices = async (signId: string) => {
+  try {
+    const response = await authAxios.get(
+      `/api/practices/list?sign_id=${signId}`
+    );
+
+    return response.data;
+  } catch (error: any) {
+    const message = error.response?.data?.message;
+
+    alert(message);
+  }
+};
+
+export const getPresignedUrl = async (keys: string[]) => {
+  try {
+    const response = await authAxios.post("/api/s3/presigned", keys);
+
+    return response.data;
+  } catch (error: any) {
+    const message = error.response?.data?.message;
+
+    alert(message);
+  }
+};
