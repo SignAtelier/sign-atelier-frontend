@@ -6,6 +6,7 @@ import ImageUploader from "../features/ImageUpload/ImageUploader";
 import Button from "../shared/components/Button";
 import Header from "../shared/components/Header";
 import Input from "../shared/components/Input";
+import Loading from "../shared/components/Loading";
 import { useUserStore } from "../store/userStore";
 
 const titleClass = `
@@ -15,6 +16,7 @@ const titleClass = `
 const Home = () => {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { accessToken } = useUserStore();
 
@@ -66,12 +68,19 @@ const Home = () => {
               onClick={async () => {
                 if (!file || !name) return;
 
+                setIsLoading(true);
+
                 const signUrl = await generateSign(file, name);
 
-                if (!signUrl) return;
+                if (!signUrl) {
+                  setIsLoading(false);
+
+                  return;
+                }
 
                 const query = new URLSearchParams({ signUrl }).toString();
 
+                setIsLoading(false);
                 navigate(`/signature/result?${query}`);
               }}
               padding="py-3"
@@ -81,6 +90,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      {isLoading && <Loading>싸인을 생성 중입니다</Loading>}
     </div>
   );
 };
