@@ -31,7 +31,7 @@ const SignCard = ({ sign, onUpdate }: SignProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center border rounded-md border-gray-200 p-4">
+    <div className="flex flex-col items-center justify-center border rounded-md border-gray-200 p-4 group">
       <div className="w-30 pb-6 flex items-center justify-center overflow-clip">
         <img src={sign.url} alt={`sign_${sign.name}`} key={sign.id} />
       </div>
@@ -40,15 +40,18 @@ const SignCard = ({ sign, onUpdate }: SignProps) => {
         <div className="flex items-center justify-between w-full truncate">
           <span className="font-semibold truncate">{sign.name}</span>
           <button onClick={openEditModal} className="cursor-pointer">
-            <MdModeEdit className="w-4 h-4 text-gray-500 shrink-0" />
+            <MdModeEdit className="w-4 h-4 text-gray-500 shrink-0 hidden group-hover:block" />
           </button>
         </div>
 
         <span className="text-sm pb-4">생성: {formatDate(sign.createdAt)}</span>
 
-        <Button padding="py-1" onClick={() => {
-          navigate(`/signature/practice/${sign.id}`)
-        }}>
+        <Button
+          padding="py-1"
+          onClick={() => {
+            navigate(`/signature/practice/${sign.id}`);
+          }}
+        >
           연습하기
         </Button>
       </div>

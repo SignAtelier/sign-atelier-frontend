@@ -45,7 +45,7 @@ const SignatureList = () => {
 
       <div className="px-10">
         <div className="pt-10 pb-10 flex justify-start">
-          <p className="text-2xl p-2 font-black">내 사인 목록</p>
+          <p className="text-2xl p-2 font-black">싸인 목록</p>
         </div>
 
         {signs === null ? (
