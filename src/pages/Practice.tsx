@@ -2,14 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPractices, getPresignedUrl } from "../apis/practice";
 import signLogo from "../assets/signLogo.png";
-import DownloadModal from "../features/practice/DownloadModal";
 import PracticeCanvas from "../features/practice/PracticeCanvas";
 import PracticeRecords from "../features/practice/PracticeRecords";
 import SignBox from "../features/practice/SignBox";
 import type { Practice } from "../features/practice/types";
 import Header from "../shared/components/Header";
-
-const isModal = false;
 
 const Practice = () => {
   const [practices, setPractices] = useState<Practice[]>([]);
@@ -59,7 +56,6 @@ const Practice = () => {
         </div>
       </div>
       <PracticeRecords practices={practices} />
-      {isModal && <DownloadModal onClose={() => {}} imgSrc="sign" />}
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import axios from "axios";
 import authAxios from "./axios";
 
 export const uploadPractice = async (file: File, signId: string) => {
@@ -44,5 +45,22 @@ export const getPresignedUrl = async (keys: string[]) => {
     const message = error.response?.data?.message;
 
     alert(message);
+  }
+};
+
+export const downloadPractice = async (url: string) => {
+  try {
+    const response = await axios.get(url, { responseType: "blob" });
+    const responseUrl = URL.createObjectURL(response.data);
+    const a = document.createElement("a");
+
+    a.href = responseUrl;
+    a.download = "signature.png";
+    document.body.appendChild(a);
+    a.click();
+    URL.revokeObjectURL(a.href);
+    document.body.removeChild(a);
+  } catch {
+    alert("다운로드 링크 만료. 새로고침 해주세요");
   }
 };

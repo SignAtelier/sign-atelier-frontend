@@ -22,7 +22,7 @@ export interface PracticeRecordsProps {
 }
 
 export interface DownloadModalProps {
-  imgSrc: string;
+  url: string;
   onClose: () => void;
 }
 
