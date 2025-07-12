@@ -2,14 +2,24 @@ import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { MdModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { deleteSign, editSignName, restoreSign } from "../../apis/signs";
+import {
+  deleteSign,
+  deleteSignHard,
+  editSignName,
+  restoreSign,
+} from "../../apis/signs";
 import Button from "../../shared/components/Button";
 import { formatDate } from "../../shared/utils/foramtDate";
 import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
 import type { SignProps } from "./types";
 
-const SignCard = ({ sign, onUpdate, onDelete }: SignProps) => {
+const SignCard = ({
+  sign,
+  onUpdate,
+  onSoftDelete,
+  onHardDelete,
+}: SignProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [name, setName] = useState("");
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
@@ -36,11 +46,17 @@ const SignCard = ({ sign, onUpdate, onDelete }: SignProps) => {
     setIsEditing(false);
   };
 
-  const handleDelete = async (signId: string) => {
+  const handleSoftDelete = async (signId: string) => {
     const sign = await deleteSign(signId);
 
-    onDelete(sign.id, sign.isDeleted);
+    onSoftDelete?.(sign.id, sign.isDeleted);
     setIsDeleteConfirmOpen(false);
+  };
+
+  const handleHardDelete = async (signId: string) => {
+    await deleteSignHard(signId);
+
+    onHardDelete?.(signId);
   };
 
   return (
@@ -73,7 +89,11 @@ const SignCard = ({ sign, onUpdate, onDelete }: SignProps) => {
               onClick={async () => {
                 const restoredSign = await restoreSign(sign.id);
 
-                onDelete(restoredSign.id, restoredSign.isDeleted);
+                if (restoredSign === false) {
+                  onHardDelete?.(sign.id);
+                }
+
+                onSoftDelete?.(restoredSign.id, restoredSign.isDeleted);
               }}
             >
               복구하기
@@ -106,8 +126,17 @@ const SignCard = ({ sign, onUpdate, onDelete }: SignProps) => {
       {isDeleteConfirmOpen && (
         <DeleteModal
           name={sign.name}
+          message={
+            sign.isDeleted
+              ? "완전히 삭제하시겠습니까?"
+              : "정말 삭제하시겠습니까? (30일 임시 보관)"
+          }
           onCancel={() => setIsDeleteConfirmOpen(false)}
-          onConfirm={() => handleDelete(sign.id)}
+          onConfirm={() => {
+            sign.isDeleted
+              ? handleHardDelete(sign.id)
+              : handleSoftDelete(sign.id);
+          }}
         />
       )}
     </div>

@@ -43,6 +43,10 @@ const SignatureList = () => {
     );
   };
 
+  const removeSign = (deletedId: string) => {
+    setSigns((prev) => prev?.filter((sign) => sign.id !== deletedId) ?? null);
+  };
+
   useEffect(() => {
     setIsLoading(true);
 
@@ -80,7 +84,7 @@ const SignatureList = () => {
                     key={sign.id}
                     sign={sign}
                     onUpdate={handleSignUpdate}
-                    onDelete={updateSignDeleteState}
+                    onSoftDelete={updateSignDeleteState}
                   />
                 ))}
               </div>
@@ -111,7 +115,7 @@ const SignatureList = () => {
                     <SignCard
                       key={sign.id}
                       sign={sign}
-                      onDelete={updateSignDeleteState}
+                      onHardDelete={removeSign}
                     />
                   ))}
                 </div>

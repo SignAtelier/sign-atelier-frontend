@@ -73,5 +73,18 @@ export const restoreSign = async (signId: string) => {
     const message = error.response?.data?.message;
 
     alert(message);
+    return false;
+  }
+};
+
+export const deleteSignHard = async (signId: string) => {
+  try {
+    await authAxios.delete("/api/signs/hard", {
+      data: { sign_id: signId },
+    });
+  } catch (error: any) {
+    const message = error.response?.data?.message;
+
+    alert(message);
   }
 };

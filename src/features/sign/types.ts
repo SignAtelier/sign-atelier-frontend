@@ -16,7 +16,8 @@ interface newSign {
 export interface SignProps {
   sign: Sign;
   onUpdate?: (newSign: newSign) => void;
-  onDelete: (updatedId: string, isDeleted: boolean) => void;
+  onSoftDelete?: (deletedId: string, isDeleted: boolean) => void;
+  onHardDelete?: (deletedId: string) => void;
 }
 
 export interface ToggleSwitchProps {
@@ -35,6 +36,7 @@ export interface EditModalProps {
 
 export interface DeleteModalProps {
   name: string;
+  message: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
