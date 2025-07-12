@@ -9,7 +9,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={`border w-full rounded-lg cursor-pointer ${style} ${padding}`}
+      className={`w-full rounded-lg cursor-pointer ${style} ${padding}`}
       onClick={onClick}
       disabled={disabled}
     >

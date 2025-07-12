@@ -44,7 +44,7 @@ const SignatureResult = () => {
                 setIsLoading(true);
                 setIsLoading(false);
               }}
-              style="bg-[#white] text-black"
+              style="bg-[#white] text-black border"
             >
               다시 생성하기
             </Button>
