@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { IoClose } from "react-icons/io5";
 import { MdModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { editSignName } from "../../apis/signs";
 import Button from "../../shared/components/Button";
-import Input from "../../shared/components/Input";
-import Modal from "../../shared/components/Modal";
 import { formatDate } from "../../shared/utils/foramtDate";
+import EditModal from "./EditModal";
 import type { SignProps } from "./types";
 
 const SignCard = ({ sign, onUpdate }: SignProps) => {
@@ -32,6 +32,9 @@ const SignCard = ({ sign, onUpdate }: SignProps) => {
 
   return (
     <div className="flex flex-col items-center justify-center border rounded-md border-gray-200 p-4 group">
+      <div onClick={openEditModal} className="self-end cursor-pointer">
+        <IoClose />
+      </div>
       <div className="w-30 pb-6 flex items-center justify-center overflow-clip">
         <img src={sign.url} alt={`sign_${sign.name}`} key={sign.id} />
       </div>
@@ -57,16 +60,13 @@ const SignCard = ({ sign, onUpdate }: SignProps) => {
       </div>
 
       {editing && (
-        <Modal onClose={handleCloseModal}>
-          <Input value={name} onChange={(e) => setName(e.target.value)} />
-
-          <div className="flex gap-2 justify-end">
-            <Button onClick={handleCloseModal} style="#white">
-              취소
-            </Button>
-            <Button onClick={() => handleEdit(sign.id, name)}>수정</Button>
-          </div>
-        </Modal>
+        <EditModal
+          name={name}
+          signId={sign.id}
+          onClose={handleCloseModal}
+          onSetName={setName}
+          onEdit={handleEdit}
+        />
       )}
     </div>
   );

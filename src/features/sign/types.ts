@@ -23,3 +23,11 @@ export interface ToggleSwitchProps {
   checked: boolean;
   onToggle: () => void;
 }
+
+export interface EditModalProps {
+  name: string;
+  signId: string;
+  onClose: () => void;
+  onSetName: (name: string) => void;
+  onEdit: (id: string, name: string) => void;
+}
