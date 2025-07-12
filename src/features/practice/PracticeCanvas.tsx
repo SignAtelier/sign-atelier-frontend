@@ -8,7 +8,9 @@ import type { PracticeCanvasProps } from "./types";
 const PracticeCanvas = ({
   title,
   practices,
-  setPractices,
+  onUpdatePractices,
+  width,
+  height,
 }: PracticeCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { sign_id } = useParams();
@@ -48,7 +50,7 @@ const PracticeCanvas = ({
       const url = await getPresignedUrl([practice.fileName]);
 
       practice.url = url;
-      setPractices([practice, ...practices]);
+      onUpdatePractices([practice, ...practices]);
     });
 
     handleClear();
@@ -58,8 +60,10 @@ const PracticeCanvas = ({
     <div className="flex flex-col items-center justify-center gap-4">
       <p className="text-base font-semibold text-gray-700">{title}</p>
 
-      <div className="p-4 w-[384px] h-[320px] border border-gray-400 rounded-xl overflow-hidden flex items-center justify-center bg-white">
-        <Canvas size={512} canvasRef={canvasRef} />
+      <div
+        className={`w-[${width}px] h-[${height}px] rounded-xl overflow-hidden flex items-center justify-center bg-white`}
+      >
+        <Canvas width={width} height={height} canvasRef={canvasRef} />
       </div>
 
       <div className="flex gap-4 w-full h-10">

@@ -34,6 +34,9 @@ const Practice = () => {
     })();
   }, []);
 
+  const width = 480;
+  const height = 320;
+
   return (
     <div className="size-full">
       <Header />
@@ -47,15 +50,28 @@ const Practice = () => {
             showOutline={false}
             onToggleImage={() => {}}
             onToggleOutline={() => {}}
+            width={width}
+            height={height}
           />
           <PracticeCanvas
             title="연습 캔버스"
             practices={practices}
-            setPractices={setPractices}
+            onUpdatePractices={setPractices}
+            width={width}
+            height={height}
           />
         </div>
       </div>
-      <PracticeRecords practices={practices} />
+      <div className="px-10 pt-10 flex justify-center">
+        <div className="flex border w-fit rounded-2xl shadow-xl border-gray-300 bg-white p-8 gap-12">
+          <div className="max-w-[1000px] mx-auto">
+            <PracticeRecords
+              practices={practices}
+              onUpdatePractices={setPractices}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

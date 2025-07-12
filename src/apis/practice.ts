@@ -64,3 +64,15 @@ export const downloadPractice = async (url: string) => {
     alert("다운로드 링크 만료. 새로고침 해주세요");
   }
 };
+
+export const deletePractices = async (fileNames: string[]) => {
+  try {
+    const response = await authAxios.delete("/api/practices", {
+      data: fileNames,
+    });
+
+    return response.data.code;
+  } catch (error: any) {
+    alert(error.response.data.message);
+  }
+};

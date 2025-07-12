@@ -8,12 +8,16 @@ const SignBox = ({
   showOutline,
   onToggleImage,
   onToggleOutline,
+  width,
+  height,
 }: SignBoxProps) => {
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <p className="text-base font-semibold text-gray-700">{title}</p>
 
-      <div className="p-4 w-[384px] h-[320px] border border-gray-400 rounded-xl overflow-hidden flex items-center justify-center bg-white">
+      <div
+        className={`p-4 w-[${width}px] h-[${height}px] border border-gray-400 rounded-xl overflow-hidden flex items-center justify-center bg-white`}
+      >
         {showImage ? (
           <img src={imageSrc} alt="sign" />
         ) : (
@@ -21,7 +25,7 @@ const SignBox = ({
         )}
       </div>
 
-      <div className="flex gap-4 h-10">
+      <div className="flex gap-8 h-10">
         <ToggleSwitch
           label="이미지 보기"
           checked={showImage}

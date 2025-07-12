@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { CanvasProps, Point } from "./types";
 
-const Canvas = ({ size, canvasRef }: CanvasProps) => {
+const Canvas = ({ width, height, canvasRef }: CanvasProps) => {
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const points = useRef<Point[]>([]);
   const isDrawing = useRef(false);
@@ -10,24 +10,24 @@ const Canvas = ({ size, canvasRef }: CanvasProps) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    canvas.style.width = `${size}px`;
-    canvas.style.height = `${size}px`;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
 
     const context = canvas.getContext("2d");
     if (!context) return;
 
     const dpr = window.devicePixelRatio;
-    canvas.width = size * dpr;
-    canvas.height = size * dpr;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
 
     context.scale(dpr, dpr);
     context.strokeStyle = "black";
-    context.lineWidth = 2;
+    context.lineWidth = 3;
     context.lineCap = "round";
     context.lineJoin = "round";
 
     contextRef.current = context;
-  }, [size]);
+  }, [width, height]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

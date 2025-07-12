@@ -18,7 +18,7 @@ export interface Practice {
 
 export interface PracticeRecordsProps {
   practices: Practice[];
-  onSelect?: (id: string) => void;
+  onUpdatePractices: Dispatch<SetStateAction<Practice[]>>;
 }
 
 export interface DownloadModalProps {
@@ -29,7 +29,9 @@ export interface DownloadModalProps {
 export interface PracticeCanvasProps {
   title: string;
   practices: Practice[];
-  setPractices: Dispatch<SetStateAction<Practice[]>>;
+  onUpdatePractices: Dispatch<SetStateAction<Practice[]>>;
+  width: number;
+  height: number;
 }
 
 export interface SignBoxProps {
@@ -39,6 +41,8 @@ export interface SignBoxProps {
   showOutline: boolean;
   onToggleImage: () => void;
   onToggleOutline: () => void;
+  width: number;
+  height: number;
 }
 
 export interface Point {
@@ -47,6 +51,7 @@ export interface Point {
 }
 
 export interface CanvasProps {
-  size: number;
   canvasRef: RefObject<HTMLCanvasElement | null>;
+  width: number;
+  height: number;
 }
