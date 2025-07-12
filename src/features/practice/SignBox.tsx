@@ -16,7 +16,8 @@ const SignBox = ({
       <p className="text-base font-semibold text-gray-700">{title}</p>
 
       <div
-        className={`p-4 w-[${width}px] h-[${height}px] border border-gray-400 rounded-xl overflow-hidden flex items-center justify-center bg-white`}
+        className={`p-4 border border-gray-400 rounded-xl overflow-hidden flex items-center justify-center bg-white`}
+        style={{ width: `${width}px`, height: `${height}px` }}
       >
         {showImage ? (
           <img src={imageSrc} alt="sign" />

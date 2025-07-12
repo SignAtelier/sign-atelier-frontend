@@ -61,7 +61,7 @@ const PracticeCanvas = ({
       <p className="text-base font-semibold text-gray-700">{title}</p>
 
       <div
-        className={`w-[${width}px] h-[${height}px] rounded-xl overflow-hidden flex items-center justify-center bg-white`}
+        className={`rounded-xl overflow-hidden flex items-center justify-center bg-white`}
       >
         <Canvas width={width} height={height} canvasRef={canvasRef} />
       </div>
