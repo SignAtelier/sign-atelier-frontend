@@ -34,11 +34,11 @@ const SignatureList = () => {
     );
   };
 
-  const handleSignDelete = (deletedId: string) => {
+  const updateSignDeleteState = (updatedId: string, isDeleted: boolean) => {
     setSigns(
       (prev) =>
         prev?.map((sign) =>
-          sign.id === deletedId ? { ...sign, isDeleted: true } : sign
+          sign.id === updatedId ? { ...sign, isDeleted } : sign
         ) ?? null
     );
   };
@@ -80,7 +80,7 @@ const SignatureList = () => {
                     key={sign.id}
                     sign={sign}
                     onUpdate={handleSignUpdate}
-                    onDelete={handleSignDelete}
+                    onDelete={updateSignDeleteState}
                   />
                 ))}
               </div>
@@ -111,7 +111,7 @@ const SignatureList = () => {
                     <SignCard
                       key={sign.id}
                       sign={sign}
-                      onDelete={handleSignDelete}
+                      onDelete={updateSignDeleteState}
                     />
                   ))}
                 </div>

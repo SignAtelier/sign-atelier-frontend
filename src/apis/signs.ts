@@ -61,3 +61,17 @@ export const deleteSign = async (signId: string) => {
     alert(message);
   }
 };
+
+export const restoreSign = async (signId: string) => {
+  try {
+    const response = await authAxios.post("/api/signs/restore", {
+      sign_id: signId,
+    });
+
+    return response.data.restoredSign;
+  } catch (error: any) {
+    const message = error.response?.data?.message;
+
+    alert(message);
+  }
+};

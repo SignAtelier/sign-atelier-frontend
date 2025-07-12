@@ -11,6 +11,8 @@ const centerClass = `
 
 const SignatureResult = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("싸인 생성 중...");
+
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const signUrl = params.get("signUrl");
@@ -30,11 +32,17 @@ const SignatureResult = () => {
               onClick={async () => {
                 if (!signUrl) return;
 
+                setLoadingMessage("싸인을 저장할게요");
+                setIsLoading(true);
+
                 const status = await saveSign(signUrl);
 
                 if (status === 201) {
                   navigate("/signature/list");
                 }
+
+                setLoadingMessage("싸인 생성 중...");
+                setIsLoading(false);
               }}
             >
               저장하고 연습하기
@@ -51,7 +59,7 @@ const SignatureResult = () => {
           </div>
         </div>
       </div>
-      {isLoading && <Loading>싸인을 생성 중입니다</Loading>}
+      {isLoading && <Loading>{loadingMessage}</Loading>}
     </div>
   );
 };

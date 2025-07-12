@@ -16,7 +16,7 @@ interface newSign {
 export interface SignProps {
   sign: Sign;
   onUpdate?: (newSign: newSign) => void;
-  onDelete: (deletedId: string) => void;
+  onDelete: (updatedId: string, isDeleted: boolean) => void;
 }
 
 export interface ToggleSwitchProps {

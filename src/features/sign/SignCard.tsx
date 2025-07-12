@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { MdModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { deleteSign, editSignName } from "../../apis/signs";
+import { deleteSign, editSignName, restoreSign } from "../../apis/signs";
 import Button from "../../shared/components/Button";
 import { formatDate } from "../../shared/utils/foramtDate";
 import DeleteModal from "./DeleteModal";
@@ -39,7 +39,7 @@ const SignCard = ({ sign, onUpdate, onDelete }: SignProps) => {
   const handleDelete = async (signId: string) => {
     const sign = await deleteSign(signId);
 
-    onDelete(sign.id);
+    onDelete(sign.id, sign.isDeleted);
     setIsDeleteConfirmOpen(false);
   };
 
@@ -70,7 +70,11 @@ const SignCard = ({ sign, onUpdate, onDelete }: SignProps) => {
             <Button
               padding="py-1"
               style="bg-green-50 text-green-600"
-              onClick={() => {}}
+              onClick={async () => {
+                const restoredSign = await restoreSign(sign.id);
+
+                onDelete(restoredSign.id, restoredSign.isDeleted);
+              }}
             >
               복구하기
             </Button>
