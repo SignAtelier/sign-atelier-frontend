@@ -35,12 +35,26 @@ export const editSignName = async (signId: string, newName: string) => {
   try {
     const formData = new FormData();
 
-    formData.append("sign_id", signId.toString());
+    formData.append("sign_id", signId);
     formData.append("new_name", newName);
 
     const response = await authAxios.patch("/api/signs/name", formData);
 
     return response.data.editedSign;
+  } catch (error: any) {
+    const message = error.response?.data?.message;
+
+    alert(message);
+  }
+};
+
+export const deleteSign = async (signId: string) => {
+  try {
+    const response = await authAxios.delete("/api/signs/soft", {
+      data: { sign_id: signId },
+    });
+
+    return response.data.deletedSign;
   } catch (error: any) {
     const message = error.response?.data?.message;
 

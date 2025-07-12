@@ -15,7 +15,8 @@ interface newSign {
 
 export interface SignProps {
   sign: Sign;
-  onUpdate: (newSign: newSign) => void;
+  onUpdate?: (newSign: newSign) => void;
+  onDelete: (deletedId: string) => void;
 }
 
 export interface ToggleSwitchProps {
@@ -30,4 +31,10 @@ export interface EditModalProps {
   onClose: () => void;
   onSetName: (name: string) => void;
   onEdit: (id: string, name: string) => void;
+}
+
+export interface DeleteModalProps {
+  name: string;
+  onConfirm: () => void;
+  onCancel: () => void;
 }

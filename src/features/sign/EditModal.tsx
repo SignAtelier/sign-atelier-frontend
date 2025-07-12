@@ -16,7 +16,7 @@ const EditModal = ({
         <Input value={name} onChange={(e) => onSetName(e.target.value)} />
 
         <div className="flex gap-2 justify-end">
-          <Button onClick={onClose} style="#white">
+          <Button onClick={onClose} style="#white border">
             취소
           </Button>
           <Button onClick={() => onEdit(signId, name)}>수정</Button>
