@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPractices, getPresignedUrl } from "../apis/practice";
-import { getSign } from "../apis/signs";
+import { getSign, getSignOutline } from "../apis/signs";
 import PracticeCanvas from "../features/practice/PracticeCanvas";
 import PracticeRecords from "../features/practice/PracticeRecords";
 import SignBox from "../features/practice/SignBox";
@@ -11,6 +11,7 @@ import Header from "../shared/components/Header";
 const Practice = () => {
   const [practices, setPractices] = useState<Practice[]>([]);
   const [signUrl, setSignUrl] = useState<string>("");
+  const [signOutlineUrl, setSignOutlineUrl] = useState<string>("");
   const { sign_id } = useParams();
   const signId = sign_id;
 
@@ -47,6 +48,18 @@ const Practice = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    if (!signId) return;
+
+    (async () => {
+      const signOutlineUrl = await getSignOutline(signId);
+
+      if (!signOutlineUrl) return;
+
+      setSignOutlineUrl(signOutlineUrl);
+    })();
+  }, []);
+
   const width = 480;
   const height = 320;
 
@@ -68,6 +81,7 @@ const Practice = () => {
           />
           <PracticeCanvas
             title="연습 캔버스"
+            signOutlineUrl={signOutlineUrl}
             practices={practices}
             onUpdatePractices={setPractices}
             width={width}

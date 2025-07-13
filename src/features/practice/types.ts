@@ -29,6 +29,7 @@ export interface DownloadModalProps {
 export interface PracticeCanvasProps {
   title: string;
   practices: Practice[];
+  signOutlineUrl: string;
   onUpdatePractices: Dispatch<SetStateAction<Practice[]>>;
   width: number;
   height: number;
@@ -51,7 +52,8 @@ export interface Point {
 }
 
 export interface CanvasProps {
-  canvasRef: RefObject<HTMLCanvasElement | null>;
   width: number;
   height: number;
+  canvasRef: RefObject<HTMLCanvasElement | null>;
+  signOutlineUrl?: string;
 }

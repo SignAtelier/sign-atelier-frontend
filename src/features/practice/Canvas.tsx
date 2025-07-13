@@ -86,7 +86,7 @@ const Canvas = ({ width, height, canvasRef }: CanvasProps) => {
   return (
     <canvas
       ref={canvasRef}
-      className="border border-gray-400 rounded-xl bg-white"
+      className="absolute top-0 left-0 z-10 w-full h-full bg-transparent border border-gray-400"
     />
   );
 };

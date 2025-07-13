@@ -9,6 +9,7 @@ const PracticeCanvas = ({
   title,
   practices,
   onUpdatePractices,
+  signOutlineUrl,
   width,
   height,
 }: PracticeCanvasProps) => {
@@ -61,8 +62,15 @@ const PracticeCanvas = ({
       <p className="text-base font-semibold text-gray-700">{title}</p>
 
       <div
-        className={`rounded-xl overflow-hidden flex items-center justify-center bg-white`}
+        className="relative rounded-xl overflow-hidden flex items-center justify-center bg-white"
+        style={{ width, height }}
       >
+        <img
+          src={signOutlineUrl}
+          alt="Sign outline"
+          className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none opacity-30"
+        />
+
         <Canvas width={width} height={height} canvasRef={canvasRef} />
       </div>
 
