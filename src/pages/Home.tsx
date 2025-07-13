@@ -7,6 +7,8 @@ import Button from "../shared/components/Button";
 import Header from "../shared/components/Header";
 import Input from "../shared/components/Input";
 import Loading from "../shared/components/Loading";
+import { fileToBase64 } from "../shared/utils/base64";
+import { useSignStore } from "../store/signStore";
 import { useUserStore } from "../store/userStore";
 
 const titleClass = `
@@ -78,6 +80,12 @@ const Home = () => {
                   return;
                 }
 
+                const base64Data = await fileToBase64(file);
+                const { setName, setFileBase64 } = useSignStore.getState();
+
+                setName(name);
+                if (typeof base64Data === "string") setFileBase64(base64Data);
+
                 const query = new URLSearchParams({ signUrl }).toString();
 
                 setIsLoading(false);
@@ -90,7 +98,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      {isLoading && <Loading>싸인을 생성 중입니다</Loading>}
+      {isLoading && <Loading>싸인 생성 중...</Loading>}
     </div>
   );
 };

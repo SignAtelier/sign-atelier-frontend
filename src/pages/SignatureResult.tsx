@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { generateSign } from "../apis/generateSign";
 import { saveSign } from "../apis/signs";
 import Button from "../shared/components/Button";
 import Header from "../shared/components/Header";
 import Loading from "../shared/components/Loading";
+import { base64ToFile } from "../shared/utils/base64";
+import { useSignStore } from "../store/signStore";
 
 const centerClass = `
   flex flex-col items-center gap-4
@@ -45,12 +48,28 @@ const SignatureResult = () => {
                 setIsLoading(false);
               }}
             >
-              저장하고 연습하기
+              저장하기
             </Button>
             <Button
-              onClick={() => {
+              onClick={async () => {
+                const { name, fileBase64 } = useSignStore.getState();
+
+                if (!name || !fileBase64) return;
+
+                const file = base64ToFile(fileBase64, name);
                 setIsLoading(true);
+
+                const signUrl = await generateSign(file, name);
+
+                if (!signUrl) {
+                  setIsLoading(false);
+
+                  return;
+                }
+                const query = new URLSearchParams({ signUrl }).toString();
+
                 setIsLoading(false);
+                navigate(`/signature/result?${query}`);
               }}
               style="bg-[#white] text-black border"
             >
