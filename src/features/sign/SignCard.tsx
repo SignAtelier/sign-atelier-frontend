@@ -79,7 +79,15 @@ const SignCard = ({
           )}
         </div>
 
-        <span className="text-sm pb-4">생성: {formatDate(sign.createdAt)}</span>
+        {sign.isDeleted ? (
+          <span className="text-sm pb-4">
+            삭제 예정: {formatDate(sign.deletedAt)}
+          </span>
+        ) : (
+          <span className="text-sm pb-4">
+            생성: {formatDate(sign.createdAt)}
+          </span>
+        )}
 
         {sign.isDeleted ? (
           <>

@@ -5,6 +5,7 @@ interface Sign {
   createdAt: string;
   updatedAt: string;
   isDeleted: boolean;
+  deletedAt: string;
 }
 
 interface newSign {
