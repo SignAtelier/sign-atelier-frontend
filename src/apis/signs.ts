@@ -88,3 +88,15 @@ export const deleteSignHard = async (signId: string) => {
     alert(message);
   }
 };
+
+export const getSign = async (signId: string) => {
+  try {
+    const response = await authAxios.get(`/api/signs/${signId}`);
+
+    return response.data.url;
+  } catch (error: any) {
+    const message = error.response?.data?.message;
+
+    alert(message);
+  }
+};
