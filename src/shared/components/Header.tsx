@@ -5,6 +5,7 @@ import LoginModal from "../../features/auth/LoginModal";
 import Profile from "../../features/auth/Profile";
 import { useUserStore } from "../../store/userStore";
 import Button from "./Button";
+import HeaderNav from "./HeaderNav";
 import UserMenu from "./UserMenu";
 
 const headerClass = `
@@ -21,12 +22,17 @@ const Header = () => {
   return (
     <header className={headerClass}>
       {isModalOpen && <LoginModal onClose={() => setIsModalOpen(false)} />}
-      <img
-        src={logo}
-        alt="싸인공방"
-        className="w-32 h-auto cursor-pointer"
-        onClick={() => navigate("/")}
-      />
+
+      <div className="flex items-center gap-14">
+        <img
+          src={logo}
+          alt="싸인공방"
+          className="w-32 h-auto cursor-pointer"
+          onClick={() => navigate("/")}
+        />
+        <HeaderNav />
+      </div>
+
       {userInfo ? (
         <div className="relative">
           <Profile
