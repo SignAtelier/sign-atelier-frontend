@@ -1,4 +1,5 @@
 import Loader from "../../shared/components/Loader";
+import Selector from "../../shared/components/Selector";
 import ToggleSwitch from "./ToggleSwitch";
 import type { SignBoxProps } from "./types";
 
@@ -7,8 +8,9 @@ const SignBox = ({
   imageSrc,
   showOutline,
   onToggleOutline,
-  width,
-  height,
+  options,
+  onSizeSelect,
+  size,
 }: SignBoxProps) => {
   return (
     <div className="flex flex-col items-center justify-center gap-4">
@@ -16,7 +18,7 @@ const SignBox = ({
 
       <div
         className={`p-4 border border-gray-400 rounded-xl overflow-hidden flex items-center justify-center bg-white`}
-        style={{ width: `${width}px`, height: `${height}px` }}
+        style={{ width: `${size.width}px`, height: `${size.height}px` }}
       >
         {imageSrc ? (
           <img
@@ -35,6 +37,15 @@ const SignBox = ({
           checked={showOutline}
           onToggle={onToggleOutline}
         />
+        <Selector
+          options={options}
+          defaultValue={options[1]}
+          onChange={(option) => {
+            if (option) onSizeSelect(option);
+          }}
+        >
+          크기 선택
+        </Selector>
       </div>
     </div>
   );

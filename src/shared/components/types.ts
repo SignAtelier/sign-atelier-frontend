@@ -31,3 +31,15 @@ export interface LoadingProps {
 export interface ToastProps {
   text: string;
 }
+
+interface Option {
+  value: { width: number; height: number };
+  label: string;
+}
+
+export interface SelectorProps {
+  children: ReactNode;
+  options: Option[];
+  defaultValue: Option;
+  onChange?: (option: Option | null) => void;
+}

@@ -32,8 +32,12 @@ export interface PracticeCanvasProps {
   showOutline: boolean;
   signOutlineUrl: string;
   onUpdatePractices: Dispatch<SetStateAction<Practice[]>>;
-  width: number;
-  height: number;
+  size: { width: number; height: number };
+}
+
+interface Option {
+  value: { width: number; height: number };
+  label: string;
 }
 
 export interface SignBoxProps {
@@ -41,8 +45,9 @@ export interface SignBoxProps {
   imageSrc: string;
   showOutline: boolean;
   onToggleOutline: () => void;
-  width: number;
-  height: number;
+  options: Option[];
+  onSizeSelect: Dispatch<SetStateAction<Option>>;
+  size: { width: number; height: number };
 }
 
 export interface Point {

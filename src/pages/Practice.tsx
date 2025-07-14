@@ -8,11 +8,24 @@ import SignBox from "../features/practice/SignBox";
 import type { Practice } from "../features/practice/types";
 import Header from "../shared/components/Header";
 
+const options = [
+  { value: { width: 420, height: 280 }, label: "작게" },
+  { value: { width: 480, height: 320 }, label: "보통" },
+  { value: { width: 600, height: 400 }, label: "크게" },
+  { value: { width: 750, height: 500 }, label: "매우 크게" },
+];
+
+interface Option {
+  value: { width: number; height: number };
+  label: string;
+}
+
 const Practice = () => {
   const [practices, setPractices] = useState<Practice[]>([]);
   const [signUrl, setSignUrl] = useState<string>("");
   const [signOutlineUrl, setSignOutlineUrl] = useState<string>("");
   const [isOutlineVisible, setIsOutlineVisible] = useState<boolean>(true);
+  const [selectedSize, setSelectedSize] = useState<Option>(options[1]);
   const { sign_id } = useParams();
   const signId = sign_id;
 
@@ -61,9 +74,6 @@ const Practice = () => {
     })();
   }, []);
 
-  const width = 480;
-  const height = 320;
-
   return (
     <div className="size-full">
       <Header />
@@ -75,8 +85,9 @@ const Practice = () => {
             imageSrc={signUrl}
             showOutline={isOutlineVisible}
             onToggleOutline={() => setIsOutlineVisible(!isOutlineVisible)}
-            width={width}
-            height={height}
+            options={options}
+            onSizeSelect={setSelectedSize}
+            size={selectedSize.value}
           />
           <PracticeCanvas
             title="연습 캔버스"
@@ -84,8 +95,7 @@ const Practice = () => {
             showOutline={isOutlineVisible}
             practices={practices}
             onUpdatePractices={setPractices}
-            width={width}
-            height={height}
+            size={selectedSize.value}
           />
         </div>
       </div>

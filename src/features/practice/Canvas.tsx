@@ -8,15 +8,18 @@ const Canvas = ({ width, height, canvasRef }: CanvasProps) => {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+
     if (!canvas) return;
 
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
 
     const context = canvas.getContext("2d");
+
     if (!context) return;
 
     const dpr = window.devicePixelRatio;
+
     canvas.width = width * dpr;
     canvas.height = height * dpr;
 
@@ -32,10 +35,12 @@ const Canvas = ({ width, height, canvasRef }: CanvasProps) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = contextRef.current;
+
     if (!canvas || !context) return;
 
     const handleMouseDown = (e: MouseEvent) => {
       const point = { x: e.offsetX, y: e.offsetY };
+
       isDrawing.current = true;
       points.current = [point];
       context.beginPath();
@@ -46,11 +51,13 @@ const Canvas = ({ width, height, canvasRef }: CanvasProps) => {
       if (!isDrawing.current) return;
 
       const point = { x: e.offsetX, y: e.offsetY };
+
       points.current.push(point);
 
       if (points.current.length < 3) {
         context.lineTo(point.x, point.y);
         context.stroke();
+
         return;
       }
 

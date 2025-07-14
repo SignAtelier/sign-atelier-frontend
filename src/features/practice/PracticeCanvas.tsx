@@ -12,8 +12,7 @@ const PracticeCanvas = ({
   showOutline,
   onUpdatePractices,
   signOutlineUrl,
-  width,
-  height,
+  size,
 }: PracticeCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { sign_id } = useParams();
@@ -28,6 +27,7 @@ const PracticeCanvas = ({
 
     for (let i = 0; i < pixels.length; i += 4) {
       const alpha = pixels[i + 3];
+
       if (alpha !== 0) return false;
     }
 
@@ -65,7 +65,7 @@ const PracticeCanvas = ({
 
       <div
         className="relative rounded-xl overflow-hidden flex items-center justify-center bg-white"
-        style={{ width, height }}
+        style={{ width: size.width, height: size.height }}
       >
         {signOutlineUrl ? (
           <>
@@ -76,7 +76,11 @@ const PracticeCanvas = ({
                 className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none opacity-30"
               />
             )}
-            <Canvas width={width} height={height} canvasRef={canvasRef} />
+            <Canvas
+              width={size.width}
+              height={size.height}
+              canvasRef={canvasRef}
+            />
           </>
         ) : (
           <Loader />
