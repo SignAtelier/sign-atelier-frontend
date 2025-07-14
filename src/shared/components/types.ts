@@ -27,3 +27,7 @@ export interface UserMenuProps {
 export interface LoadingProps {
   children: ReactNode;
 }
+
+export interface ToastProps {
+  text: string;
+}

@@ -9,6 +9,7 @@ import {
   restoreSign,
 } from "../../apis/signs";
 import Button from "../../shared/components/Button";
+import Toast from "../../shared/components/Toast";
 import { formatDate } from "../../shared/utils/foramtDate";
 import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
@@ -21,6 +22,7 @@ const SignCard = ({
   onHardDelete,
 }: SignProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [toastText, setToastText] = useState<string>("");
   const [name, setName] = useState("");
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
@@ -70,8 +72,19 @@ const SignCard = ({
       </div>
 
       <div className="flex flex-col items-start w-full">
-        <div className="flex items-center justify-between w-full truncate">
-          <span className="font-semibold truncate">{sign.name}</span>
+        <div className="flex items-center justify-between w-full">
+          <div className="relative max-w-[160px]">
+            {toastText === sign.name && <Toast text={sign.name} />}
+
+            <span
+              className="font-semibold truncate block w-full"
+              onMouseEnter={() => setToastText(sign.name)}
+              onMouseLeave={() => setToastText("")}
+            >
+              {sign.name}
+            </span>
+          </div>
+
           {!sign.isDeleted && (
             <button onClick={openEditModal} className="cursor-pointer">
               <MdModeEdit className="w-4 h-4 text-gray-500 shrink-0 hidden group-hover:block" />
