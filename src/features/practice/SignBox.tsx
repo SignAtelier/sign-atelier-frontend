@@ -23,7 +23,11 @@ const SignBox = ({
         {imageSrc ? (
           <>
             {showImage ? (
-              <img src={imageSrc} alt="sign" />
+              <img
+                src={imageSrc}
+                alt="sign"
+                className="w-full h-full object-contain"
+              />
             ) : (
               <span className="text-sm text-gray-400">이미지 숨김</span>
             )}
