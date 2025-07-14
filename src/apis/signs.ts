@@ -19,9 +19,11 @@ export const saveSign = async (url: string) => {
   }
 };
 
-export const getSigns = async () => {
+export const getSignsByStatus = async (isDeleted: boolean) => {
   try {
-    const response = await authAxios.get("/api/signs/list");
+    const response = await authAxios.get("/api/signs/list", {
+      params: { is_deleted: isDeleted },
+    });
 
     return response.data.signs;
   } catch (error: any) {

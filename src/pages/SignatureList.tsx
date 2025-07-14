@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaCaretDown, FaCaretRight } from "react-icons/fa6";
-import { getSigns } from "../apis/signs";
+import { getSignsByStatus } from "../apis/signs";
 import SignCard from "../features/sign/SignCard";
 import Header from "../shared/components/Header";
 import Loading from "../shared/components/Loading";
@@ -15,56 +15,80 @@ interface Sign {
   deletedAt: string | null;
 }
 
-interface newSign {
-  id: string;
-  name: string;
-  udpatedAt: string;
-}
-
 const SignatureList = () => {
-  const [signs, setSigns] = useState<Sign[] | null>(null);
+  const [activeSigns, setActiveSigns] = useState<Sign[]>([]);
+  const [deletedSigns, setDeletedSigns] = useState<Sign[]>([]);
   const [showDeleted, setShowDeleted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSignUpdate = (newSign: newSign) => {
-    setSigns(
-      (prev) =>
-        prev?.map((sign) =>
-          sign.id === newSign.id ? { ...sign, name: newSign.name } : sign
-        ) ?? null
+  const updateSignName = ({ id, name, updatedAt }: Sign) => {
+    setActiveSigns((prevSigns) =>
+      prevSigns.map((sign) =>
+        sign.id === id ? { ...sign, name, updatedAt } : sign
+      )
     );
   };
 
-  const updateSignDeleteState = (
-    updatedId: string,
-    isDeleted: boolean,
-    deletedAt: string | null
-  ) => {
-    setSigns(
-      (prev) =>
-        prev?.map((sign) =>
-          sign.id === updatedId ? { ...sign, isDeleted, deletedAt } : sign
-        ) ?? null
-    );
+  const softDeleteSign = ({ id, isDeleted, deletedAt }: Sign) => {
+    const targetSign = activeSigns.find((sign) => sign.id === id);
+
+    if (!targetSign) return;
+
+    const deletedSign: Sign = {
+      ...targetSign,
+      isDeleted,
+      deletedAt,
+    };
+
+    setDeletedSigns((prev) => [deletedSign, ...prev]);
+    setActiveSigns((prev) => prev.filter((sign) => sign.id !== id));
   };
 
-  const removeSign = (deletedId: string) => {
-    setSigns((prev) => prev?.filter((sign) => sign.id !== deletedId) ?? null);
+  const restoreSign = ({ id, isDeleted, deletedAt }: Sign) => {
+    const targetSign = deletedSigns.find((sign) => sign.id === id);
+
+    if (!targetSign) return;
+
+    const activeSign: Sign = {
+      ...targetSign,
+      isDeleted,
+      deletedAt,
+    };
+
+    setActiveSigns((prev) =>
+      [...prev, activeSign].sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+    );
+    setDeletedSigns((prev) => prev.filter((sign) => sign.id !== id));
+  };
+
+  const hardDeleteSign = (deletedId: string) => {
+    setDeletedSigns((prev) => prev.filter((sign) => sign.id !== deletedId));
   };
 
   useEffect(() => {
     setIsLoading(true);
 
     (async () => {
-      const result = await getSigns();
+      const activeList = await getSignsByStatus(false);
 
-      setSigns(result);
+      setActiveSigns(activeList);
       setIsLoading(false);
     })();
   }, []);
 
-  const deletedSigns = signs?.filter((sign) => sign.isDeleted) ?? [];
-  const activeSigns = signs?.filter((sign) => !sign.isDeleted) ?? [];
+  useEffect(() => {
+    setIsLoading(true);
+
+    (async () => {
+      const deletedList = await getSignsByStatus(true);
+
+      setDeletedSigns(deletedList);
+      setIsLoading(false);
+    })();
+  }, []);
 
   return (
     <div className="size-full">
@@ -88,8 +112,8 @@ const SignatureList = () => {
                   <SignCard
                     key={sign.id}
                     sign={sign}
-                    onUpdate={handleSignUpdate}
-                    onSoftDelete={updateSignDeleteState}
+                    onUpdateName={updateSignName}
+                    onSoftDelete={softDeleteSign}
                   />
                 ))}
               </div>
@@ -120,8 +144,9 @@ const SignatureList = () => {
                     <SignCard
                       key={sign.id}
                       sign={sign}
-                      onHardDelete={removeSign}
-                      onSoftDelete={updateSignDeleteState}
+                      onSoftDelete={softDeleteSign}
+                      onRestore={restoreSign}
+                      onHardDelete={hardDeleteSign}
                     />
                   ))}
                 </div>

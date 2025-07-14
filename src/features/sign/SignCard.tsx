@@ -17,7 +17,8 @@ import type { SignProps } from "./types";
 
 const SignCard = ({
   sign,
-  onUpdate,
+  onUpdateName,
+  onRestore,
   onSoftDelete,
   onHardDelete,
 }: SignProps) => {
@@ -44,14 +45,14 @@ const SignCard = ({
   const handleEdit = async (signId: string, newName: string) => {
     const editSign = await editSignName(signId, newName);
 
-    onUpdate?.(editSign);
+    onUpdateName?.(editSign);
     setIsEditing(false);
   };
 
   const handleSoftDelete = async (signId: string) => {
     const sign = await deleteSign(signId);
 
-    onSoftDelete?.(sign.id, sign.isDeleted, sign.deletedAt);
+    onSoftDelete?.(sign);
     setIsDeleteConfirmOpen(false);
   };
 
@@ -114,13 +115,9 @@ const SignCard = ({
                   onHardDelete?.(sign.id);
 
                   return;
-                } else if (restoredSign === "NOT_DELETED") {
-                  onSoftDelete?.(sign.id, false, null);
-
-                  return;
                 }
 
-                onSoftDelete?.(restoredSign.id, restoredSign.isDeleted, null);
+                onRestore?.(restoredSign);
               }}
             >
               복구하기

@@ -8,20 +8,11 @@ interface Sign {
   deletedAt: string | null;
 }
 
-interface newSign {
-  id: string;
-  name: string;
-  udpatedAt: string;
-}
-
 export interface SignProps {
   sign: Sign;
-  onUpdate?: (newSign: newSign) => void;
-  onSoftDelete: (
-    deletedId: string,
-    isDeleted: boolean,
-    deletedAt: string | null
-  ) => void;
+  onUpdateName?: (sign: Sign) => void;
+  onRestore?: (sign: Sign) => void;
+  onSoftDelete: (sign: Sign) => void;
   onHardDelete?: (deletedId: string) => void;
 }
 
