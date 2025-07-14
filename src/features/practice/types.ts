@@ -29,6 +29,7 @@ export interface DownloadModalProps {
 export interface PracticeCanvasProps {
   title: string;
   practices: Practice[];
+  showOutline: boolean;
   signOutlineUrl: string;
   onUpdatePractices: Dispatch<SetStateAction<Practice[]>>;
   width: number;
@@ -38,9 +39,7 @@ export interface PracticeCanvasProps {
 export interface SignBoxProps {
   title: string;
   imageSrc: string;
-  showImage: boolean;
   showOutline: boolean;
-  onToggleImage: () => void;
   onToggleOutline: () => void;
   width: number;
   height: number;

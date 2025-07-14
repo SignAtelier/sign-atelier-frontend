@@ -5,9 +5,7 @@ import type { SignBoxProps } from "./types";
 const SignBox = ({
   title,
   imageSrc,
-  showImage,
   showOutline,
-  onToggleImage,
   onToggleOutline,
   width,
   height,
@@ -21,28 +19,17 @@ const SignBox = ({
         style={{ width: `${width}px`, height: `${height}px` }}
       >
         {imageSrc ? (
-          <>
-            {showImage ? (
-              <img
-                src={imageSrc}
-                alt="sign"
-                className="w-full h-full object-contain"
-              />
-            ) : (
-              <span className="text-sm text-gray-400">이미지 숨김</span>
-            )}
-          </>
+          <img
+            src={imageSrc}
+            alt="sign"
+            className="w-full h-full object-contain"
+          />
         ) : (
           <Loader />
         )}
       </div>
 
       <div className="flex gap-8 h-10">
-        <ToggleSwitch
-          label="이미지 보기"
-          checked={showImage}
-          onToggle={onToggleImage}
-        />
         <ToggleSwitch
           label="윤곽선 보기"
           checked={showOutline}

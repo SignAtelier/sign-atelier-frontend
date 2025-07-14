@@ -9,7 +9,7 @@ const ToggleSwitch = ({ label, checked, onToggle }: ToggleSwitchProps) => {
       <span className="text-sm text-gray-600">{label}</span>
       <div
         className={`w-10 h-6 flex items-center rounded-full p-1 transition-all ${
-          checked ? "bg-green-400" : "bg-gray-300"
+          checked ? "bg-[#3A5AFE]" : "bg-gray-300"
         }`}
       >
         <div

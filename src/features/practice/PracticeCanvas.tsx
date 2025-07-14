@@ -9,6 +9,7 @@ import type { PracticeCanvasProps } from "./types";
 const PracticeCanvas = ({
   title,
   practices,
+  showOutline,
   onUpdatePractices,
   signOutlineUrl,
   width,
@@ -68,12 +69,13 @@ const PracticeCanvas = ({
       >
         {signOutlineUrl ? (
           <>
-            <img
-              src={signOutlineUrl}
-              alt="Sign outline"
-              className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none opacity-30"
-            />
-
+            {showOutline && (
+              <img
+                src={signOutlineUrl}
+                alt="Sign outline"
+                className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none opacity-30"
+              />
+            )}
             <Canvas width={width} height={height} canvasRef={canvasRef} />
           </>
         ) : (

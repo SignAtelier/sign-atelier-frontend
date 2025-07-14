@@ -12,6 +12,7 @@ const Practice = () => {
   const [practices, setPractices] = useState<Practice[]>([]);
   const [signUrl, setSignUrl] = useState<string>("");
   const [signOutlineUrl, setSignOutlineUrl] = useState<string>("");
+  const [isOutlineVisible, setIsOutlineVisible] = useState<boolean>(true);
   const { sign_id } = useParams();
   const signId = sign_id;
 
@@ -72,16 +73,15 @@ const Practice = () => {
           <SignBox
             title="만든 싸인"
             imageSrc={signUrl}
-            showImage={true}
-            showOutline={false}
-            onToggleImage={() => {}}
-            onToggleOutline={() => {}}
+            showOutline={isOutlineVisible}
+            onToggleOutline={() => setIsOutlineVisible(!isOutlineVisible)}
             width={width}
             height={height}
           />
           <PracticeCanvas
             title="연습 캔버스"
             signOutlineUrl={signOutlineUrl}
+            showOutline={isOutlineVisible}
             practices={practices}
             onUpdatePractices={setPractices}
             width={width}
