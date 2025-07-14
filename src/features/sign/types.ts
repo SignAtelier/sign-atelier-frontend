@@ -5,7 +5,7 @@ interface Sign {
   createdAt: string;
   updatedAt: string;
   isDeleted: boolean;
-  deletedAt: string;
+  deletedAt: string | null;
 }
 
 interface newSign {
@@ -17,7 +17,11 @@ interface newSign {
 export interface SignProps {
   sign: Sign;
   onUpdate?: (newSign: newSign) => void;
-  onSoftDelete?: (deletedId: string, isDeleted: boolean) => void;
+  onSoftDelete: (
+    deletedId: string,
+    isDeleted: boolean,
+    deletedAt: string | null
+  ) => void;
   onHardDelete?: (deletedId: string) => void;
 }
 

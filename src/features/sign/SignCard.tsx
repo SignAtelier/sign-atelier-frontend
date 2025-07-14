@@ -49,7 +49,7 @@ const SignCard = ({
   const handleSoftDelete = async (signId: string) => {
     const sign = await deleteSign(signId);
 
-    onSoftDelete?.(sign.id, sign.isDeleted);
+    onSoftDelete?.(sign.id, sign.isDeleted, sign.deletedAt);
     setIsDeleteConfirmOpen(false);
   };
 
@@ -79,7 +79,7 @@ const SignCard = ({
           )}
         </div>
 
-        {sign.isDeleted ? (
+        {sign.deletedAt ? (
           <span className="text-sm pb-4">
             삭제 예정: {formatDate(sign.deletedAt)}
           </span>
@@ -97,11 +97,17 @@ const SignCard = ({
               onClick={async () => {
                 const restoredSign = await restoreSign(sign.id);
 
-                if (restoredSign === false) {
+                if (restoredSign === "ALREADY_DELETED") {
                   onHardDelete?.(sign.id);
+
+                  return;
+                } else if (restoredSign === "NOT_DELETED") {
+                  onSoftDelete?.(sign.id, false, null);
+
+                  return;
                 }
 
-                onSoftDelete?.(restoredSign.id, restoredSign.isDeleted);
+                onSoftDelete?.(restoredSign.id, restoredSign.isDeleted, null);
               }}
             >
               복구하기

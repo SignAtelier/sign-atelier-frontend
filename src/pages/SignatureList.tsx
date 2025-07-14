@@ -12,6 +12,7 @@ interface Sign {
   createdAt: string;
   updatedAt: string;
   isDeleted: boolean;
+  deletedAt: string | null;
 }
 
 interface newSign {
@@ -34,11 +35,15 @@ const SignatureList = () => {
     );
   };
 
-  const updateSignDeleteState = (updatedId: string, isDeleted: boolean) => {
+  const updateSignDeleteState = (
+    updatedId: string,
+    isDeleted: boolean,
+    deletedAt: string | null
+  ) => {
     setSigns(
       (prev) =>
         prev?.map((sign) =>
-          sign.id === updatedId ? { ...sign, isDeleted } : sign
+          sign.id === updatedId ? { ...sign, isDeleted, deletedAt } : sign
         ) ?? null
     );
   };
@@ -116,6 +121,7 @@ const SignatureList = () => {
                       key={sign.id}
                       sign={sign}
                       onHardDelete={removeSign}
+                      onSoftDelete={updateSignDeleteState}
                     />
                   ))}
                 </div>

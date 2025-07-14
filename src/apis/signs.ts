@@ -73,7 +73,8 @@ export const restoreSign = async (signId: string) => {
     const message = error.response?.data?.message;
 
     alert(message);
-    return false;
+
+    return error.response?.data?.code;
   }
 };
 
