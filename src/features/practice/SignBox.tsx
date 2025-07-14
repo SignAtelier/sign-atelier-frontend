@@ -1,3 +1,4 @@
+import Loader from "../../shared/components/Loader";
 import ToggleSwitch from "./ToggleSwitch";
 import type { SignBoxProps } from "./types";
 
@@ -19,10 +20,16 @@ const SignBox = ({
         className={`p-4 border border-gray-400 rounded-xl overflow-hidden flex items-center justify-center bg-white`}
         style={{ width: `${width}px`, height: `${height}px` }}
       >
-        {showImage ? (
-          <img src={imageSrc} alt="sign" />
+        {imageSrc ? (
+          <>
+            {showImage ? (
+              <img src={imageSrc} alt="sign" />
+            ) : (
+              <span className="text-sm text-gray-400">이미지 숨김</span>
+            )}
+          </>
         ) : (
-          <span className="text-sm text-gray-400">이미지 숨김</span>
+          <Loader />
         )}
       </div>
 

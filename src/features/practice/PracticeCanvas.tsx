@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useParams } from "react-router-dom";
 import { getPresignedUrl, uploadPractice } from "../../apis/practice";
 import Button from "../../shared/components/Button";
+import Loader from "../../shared/components/Loader";
 import Canvas from "./Canvas";
 import type { PracticeCanvasProps } from "./types";
 
@@ -65,13 +66,19 @@ const PracticeCanvas = ({
         className="relative rounded-xl overflow-hidden flex items-center justify-center bg-white"
         style={{ width, height }}
       >
-        <img
-          src={signOutlineUrl}
-          alt="Sign outline"
-          className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none opacity-30"
-        />
+        {signOutlineUrl ? (
+          <>
+            <img
+              src={signOutlineUrl}
+              alt="Sign outline"
+              className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none opacity-30"
+            />
 
-        <Canvas width={width} height={height} canvasRef={canvasRef} />
+            <Canvas width={width} height={height} canvasRef={canvasRef} />
+          </>
+        ) : (
+          <Loader />
+        )}
       </div>
 
       <div className="flex gap-4 w-full h-10">
