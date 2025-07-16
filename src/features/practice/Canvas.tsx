@@ -1,7 +1,17 @@
 import { useEffect, useRef } from "react";
+import {
+  getContourMask,
+  getDiceConfident,
+} from "../../shared/utils/contourScore";
 import type { CanvasProps, Point } from "./types";
 
-const Canvas = ({ width, height, canvasRef }: CanvasProps) => {
+const Canvas = ({
+  width,
+  height,
+  canvasRef,
+  onChangeScore,
+  skeletonCanvasRef,
+}: CanvasProps) => {
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const points = useRef<Point[]>([]);
   const isDrawing = useRef(false);
@@ -14,37 +24,35 @@ const Canvas = ({ width, height, canvasRef }: CanvasProps) => {
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
 
-    const context = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
-    if (!context) return;
+    if (!ctx) return;
 
-    const dpr = window.devicePixelRatio;
+    ctx.fillStyle = "rgba(255,255,255,0.1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
 
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
+    contextRef.current = ctx;
 
-    context.scale(dpr, dpr);
-    context.strokeStyle = "black";
-    context.lineWidth = 3;
-    context.lineCap = "round";
-    context.lineJoin = "round";
-
-    contextRef.current = context;
+    onChangeScore(0);
   }, [width, height]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const context = contextRef.current;
+    const ctx = contextRef.current;
 
-    if (!canvas || !context) return;
+    if (!canvas || !ctx) return;
 
     const handleMouseDown = (e: MouseEvent) => {
       const point = { x: e.offsetX, y: e.offsetY };
 
       isDrawing.current = true;
       points.current = [point];
-      context.beginPath();
-      context.moveTo(point.x, point.y);
+      ctx.beginPath();
+      ctx.moveTo(point.x, point.y);
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -55,8 +63,8 @@ const Canvas = ({ width, height, canvasRef }: CanvasProps) => {
       points.current.push(point);
 
       if (points.current.length < 3) {
-        context.lineTo(point.x, point.y);
-        context.stroke();
+        ctx.lineTo(point.x, point.y);
+        ctx.stroke();
 
         return;
       }
@@ -68,32 +76,53 @@ const Canvas = ({ width, height, canvasRef }: CanvasProps) => {
         y: (prev.y + curr.y) / 2,
       };
 
-      context.quadraticCurveTo(prev.x, prev.y, mid.x, mid.y);
-      context.stroke();
+      ctx.quadraticCurveTo(prev.x, prev.y, mid.x, mid.y);
+      ctx.stroke();
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = async () => {
       isDrawing.current = false;
-      context.beginPath();
+
+      if (!skeletonCanvasRef.current || !canvasRef.current) return;
+
+      const skeletonContourMask = await getContourMask(
+        skeletonCanvasRef.current
+      );
+      const userContourMask = await getContourMask(canvasRef.current);
+      const score = await getDiceConfident(
+        skeletonContourMask,
+        userContourMask
+      );
+
+      onChangeScore(score);
+
+      ctx.beginPath();
+    };
+
+    const handleMouseLeave = () => {
+      isDrawing.current = false;
+      ctx.beginPath();
     };
 
     canvas.addEventListener("mousedown", handleMouseDown);
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseup", handleMouseUp);
-    canvas.addEventListener("mouseleave", handleMouseUp);
+    canvas.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
       canvas.removeEventListener("mousedown", handleMouseDown);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseup", handleMouseUp);
-      canvas.removeEventListener("mouseleave", handleMouseUp);
+      canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, []);
+  }, [width, height]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute top-0 left-0 z-10 w-full h-full bg-transparent border border-gray-400"
+      className="absolute top-0 left-0 z-10"
+      width={width}
+      height={height}
     />
   );
 };

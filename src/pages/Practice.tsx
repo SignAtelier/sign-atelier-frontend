@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPractices, getPresignedUrl } from "../apis/practice";
 import { getSign, getSignOutline } from "../apis/signs";
@@ -7,6 +7,7 @@ import PracticeRecords from "../features/practice/PracticeRecords";
 import SignBox from "../features/practice/SignBox";
 import type { Practice } from "../features/practice/types";
 import Header from "../shared/components/Header";
+import { blobToCanvas } from "../shared/utils/convert";
 
 const options = [
   { value: { width: 420, height: 280 }, label: "작게" },
@@ -25,7 +26,10 @@ const Practice = () => {
   const [signUrl, setSignUrl] = useState<string>("");
   const [signOutlineUrl, setSignOutlineUrl] = useState<string>("");
   const [isOutlineVisible, setIsOutlineVisible] = useState<boolean>(true);
+  const [isScoreVisible, setIsScoreVisible] = useState<boolean>(true);
   const [selectedSize, setSelectedSize] = useState<Option>(options[1]);
+  const skeletonCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const skeletonImageRef = useRef<HTMLImageElement | null>(null);
   const { sign_id } = useParams();
   const signId = sign_id;
 
@@ -66,13 +70,49 @@ const Practice = () => {
     if (!signId) return;
 
     (async () => {
-      const signOutlineUrl = await getSignOutline(signId);
+      const responseData = await getSignOutline(
+        signId,
+        selectedSize.value.width,
+        selectedSize.value.height
+      );
+      const outlineUrl = responseData.url;
+      const skeletonBase64 = responseData.skeleton;
 
-      if (!signOutlineUrl) return;
+      if (outlineUrl) {
+        setSignOutlineUrl(outlineUrl);
+      }
 
-      setSignOutlineUrl(signOutlineUrl);
+      if (skeletonBase64) {
+        const binary = atob(skeletonBase64);
+        const byteArray = new Uint8Array(
+          [...binary].map((character) => character.charCodeAt(0))
+        );
+        const blob = new Blob([byteArray], { type: "image/png" });
+
+        const { canvas, image } = await blobToCanvas(blob);
+
+        skeletonImageRef.current = image;
+        skeletonCanvasRef.current = canvas;
+      }
     })();
   }, []);
+
+  useEffect(() => {
+    if (!skeletonCanvasRef.current || !skeletonImageRef.current) return;
+
+    const skeletonCanvas = skeletonCanvasRef.current;
+    const img = skeletonImageRef.current;
+
+    skeletonCanvas.width = selectedSize.value.width;
+    skeletonCanvas.height = selectedSize.value.height;
+
+    const ctx = skeletonCanvas.getContext("2d");
+
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, skeletonCanvas.width, skeletonCanvas.height);
+    ctx.drawImage(img, 0, 0, skeletonCanvas.width, skeletonCanvas.height);
+  }, [selectedSize.value.width, selectedSize.value.height]);
 
   return (
     <div className="size-full">
@@ -84,7 +124,9 @@ const Practice = () => {
             title="만든 싸인"
             imageSrc={signUrl}
             showOutline={isOutlineVisible}
+            showScore={isScoreVisible}
             onToggleOutline={() => setIsOutlineVisible(!isOutlineVisible)}
+            onToggleScore={() => setIsScoreVisible(!isScoreVisible)}
             options={options}
             onSizeSelect={setSelectedSize}
             size={selectedSize.value}
@@ -93,12 +135,15 @@ const Practice = () => {
             title="연습 캔버스"
             signOutlineUrl={signOutlineUrl}
             showOutline={isOutlineVisible}
+            showScore={isScoreVisible}
             practices={practices}
             onUpdatePractices={setPractices}
             size={selectedSize.value}
+            skeletonCanvasRef={skeletonCanvasRef}
           />
         </div>
       </div>
+
       <div className="px-10 pt-10 flex justify-center">
         <div className="flex border w-fit rounded-2xl shadow-xl border-gray-300 bg-white p-8 gap-12">
           <div className="max-w-[1000px] mx-auto">

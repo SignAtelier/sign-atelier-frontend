@@ -7,7 +7,9 @@ const SignBox = ({
   title,
   imageSrc,
   showOutline,
+  showScore,
   onToggleOutline,
+  onToggleScore,
   options,
   onSizeSelect,
   size,
@@ -31,11 +33,16 @@ const SignBox = ({
         )}
       </div>
 
-      <div className="flex gap-8 h-10">
+      <div className="flex gap-4 h-10">
         <ToggleSwitch
-          label="윤곽선 보기"
+          label="윤곽선"
           checked={showOutline}
           onToggle={onToggleOutline}
+        />
+        <ToggleSwitch
+          label="평가 모드"
+          checked={showScore}
+          onToggle={onToggleScore}
         />
         <Selector
           options={options}

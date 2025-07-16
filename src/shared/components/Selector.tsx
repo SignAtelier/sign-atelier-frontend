@@ -15,11 +15,11 @@ const Selector = ({
         styles={{
           control: (provided) => ({
             ...provided,
-            width: "140px",
+            width: "110px",
           }),
           menu: (provided) => ({
             ...provided,
-            width: "140px",
+            width: "110px",
           }),
           option: (provided, state) => ({
             ...provided,

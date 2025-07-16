@@ -30,9 +30,11 @@ export interface PracticeCanvasProps {
   title: string;
   practices: Practice[];
   showOutline: boolean;
+  showScore: boolean;
   signOutlineUrl: string;
   onUpdatePractices: Dispatch<SetStateAction<Practice[]>>;
   size: { width: number; height: number };
+  skeletonCanvasRef: React.RefObject<HTMLCanvasElement | null>;
 }
 
 interface Option {
@@ -44,7 +46,9 @@ export interface SignBoxProps {
   title: string;
   imageSrc: string;
   showOutline: boolean;
+  showScore: boolean;
   onToggleOutline: () => void;
+  onToggleScore: () => void;
   options: Option[];
   onSizeSelect: Dispatch<SetStateAction<Option>>;
   size: { width: number; height: number };
@@ -60,4 +64,6 @@ export interface CanvasProps {
   height: number;
   canvasRef: RefObject<HTMLCanvasElement | null>;
   signOutlineUrl?: string;
+  onChangeScore: Dispatch<SetStateAction<number>>;
+  skeletonCanvasRef: React.RefObject<HTMLCanvasElement | null>;
 }

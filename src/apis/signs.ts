@@ -104,11 +104,17 @@ export const getSign = async (signId: string) => {
   }
 };
 
-export const getSignOutline = async (signId: string) => {
+export const getSignOutline = async (
+  signId: string,
+  width: number,
+  height: number
+) => {
   try {
-    const response = await authAxios.get(`/api/signs/outline/${signId}`);
+    const response = await authAxios.get(
+      `/api/signs/outline/${signId}?width=${width}&height=${height}`
+    );
 
-    return response.data.url;
+    return response.data;
   } catch (error: any) {
     const message = error.response?.data?.message;
 

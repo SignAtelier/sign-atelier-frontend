@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPresignedUrl, uploadPractice } from "../../apis/practice";
 import Button from "../../shared/components/Button";
@@ -10,11 +10,14 @@ const PracticeCanvas = ({
   title,
   practices,
   showOutline,
+  showScore,
   onUpdatePractices,
   signOutlineUrl,
   size,
+  skeletonCanvasRef,
 }: PracticeCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [score, setScore] = useState<number>(0);
   const { sign_id } = useParams();
   const signId = sign_id;
 
@@ -40,6 +43,10 @@ const PracticeCanvas = ({
 
     if (canvas && ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(255,255,255,0.1)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      setScore(0);
     }
   };
 
@@ -64,7 +71,7 @@ const PracticeCanvas = ({
       <p className="text-base font-semibold text-gray-700">{title}</p>
 
       <div
-        className="relative rounded-xl overflow-hidden flex items-center justify-center bg-white"
+        className="relative border border-gray-400 rounded-xl overflow-hidden flex items-center justify-center bg-white"
         style={{ width: size.width, height: size.height }}
       >
         {signOutlineUrl ? (
@@ -80,7 +87,18 @@ const PracticeCanvas = ({
               width={size.width}
               height={size.height}
               canvasRef={canvasRef}
+              onChangeScore={setScore}
+              skeletonCanvasRef={skeletonCanvasRef}
             />
+            {showScore && (
+              <div
+                className={`
+                  absolute top-3 right-3 px-3 py-1 rounded-md shadow-md text-lg font-semibold bg-white/80 backdrop-blur border border-gray-300 text-gray-800 z-15
+                `}
+              >
+                {Math.round(score * 100)}점
+              </div>
+            )}
           </>
         ) : (
           <Loader />
