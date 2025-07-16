@@ -5,7 +5,7 @@ import authAxios from "./axios";
 export const getAccessToken = async () => {
   try {
     const response = await axios.post(
-      "https://e18b69c76523.ngrok-free.app/api/auth/refresh",
+      "https://5ec0ae27d9fa.ngrok-free.app/api/auth/refresh",
       null,
       {
         withCredentials: true,
