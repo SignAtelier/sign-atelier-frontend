@@ -21,7 +21,7 @@ interface Option {
   label: string;
 }
 
-const Practice = () => {
+const Practices = () => {
   const [practices, setPractices] = useState<Practice[]>([]);
   const [signUrl, setSignUrl] = useState<string>("");
   const [signOutlineUrl, setSignOutlineUrl] = useState<string>("");
@@ -158,4 +158,4 @@ const Practice = () => {
   );
 };
 
-export default Practice;
+export default Practices;
