@@ -2,6 +2,7 @@ import axios, { type AxiosInstance } from "axios";
 import { useUserStore } from "../store/userStore";
 
 const authAxios: AxiosInstance = axios.create({
+  baseURL: "https://e18b69c76523.ngrok-free.app",
   withCredentials: true,
 });
 

@@ -4,9 +4,13 @@ import authAxios from "./axios";
 
 export const getAccessToken = async () => {
   try {
-    const response = await axios.post("/api/auth/refresh", {
-      withCredentials: true,
-    });
+    const response = await axios.post(
+      "https://e18b69c76523.ngrok-free.app/api/auth/refresh",
+      null,
+      {
+        withCredentials: true,
+      }
+    );
 
     return response.data.accessToken;
   } catch {

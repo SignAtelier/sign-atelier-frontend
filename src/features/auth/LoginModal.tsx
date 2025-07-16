@@ -4,7 +4,7 @@ import type { LoginModalProps } from "./types";
 
 const LoginModal = ({ onClose }: LoginModalProps) => {
   const handleLogin = () => {
-    window.location.href = "http://localhost:8000/api/auth/login";
+    window.location.href = "https://e18b69c76523.ngrok-free.app/api/auth/login";
   };
 
   return (
