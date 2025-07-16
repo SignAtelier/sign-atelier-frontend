@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "composite": true,
-    "noEmit": false,
-    "jsx": "react-jsx"
+    "allowImportingTsExtensions": false,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "emitDeclarationOnly": false,
+    "declaration": false
   },
   "files": [],
   "references": [
