@@ -55,41 +55,53 @@
 
 ## 🛠 기술 스택
 
-### 클라이언트
+### 클라이언트 기술 스택
 
 <span>
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
   <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
   <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+  <img src="https://img.shields.io/badge/Zustand-443D4A?style=for-the-badge&logo=react&logoColor=white">
 </span>
 
+#### Zustand 도입 배경
+로그인 상태를 전역에서 관리하기 위해 도입함. 가볍고 보일러플레이트 코드가 적어 구현 속도가 빠르며, React와 자연스럽게 결합되어 인증 상태를 여러 컴포넌트에서 손쉽게 공유하고 갱신할 수 있음.
 
-### 서버
+<details> <summary>프로젝트 전체 기술 스택</summary>
+
+#### 클라이언트
+
+<span>
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
+  <img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+  <img src="https://img.shields.io/badge/Zustand-443D4A?style=for-the-badge&logo=react&logoColor=white">
+</span>
+
+#### 서버
 
 <span>
   <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white">
   <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white">
 </span>
 
-
-### 저장소
+#### 저장소
 
 <span>
   <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white">
   <img src="https://img.shields.io/badge/AWS%20S3-569A31?style=for-the-badge&logo=amazonaws&logoColor=white">
 </span>
 
-### 배포
+#### 배포
 
 <span>
   <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">
   <img src="https://img.shields.io/badge/AWS%20Elastic%20Beanstalk-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">
 </span>
 
-### Zustand 도입 배경
-
-로그인 상태를 전역에서 관리하기 위해 도입했습니다. 가볍고 보일러플레이트 코드가 적어 구현 속도가 빠르며, React와 자연스럽게 결합되어 인증 상태를 여러 컴포넌트에서 손쉽게 공유하고 갱신할 수 있습니다.
+</details>
 
 ## 🚀 핵심 기능
 
