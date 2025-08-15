@@ -108,7 +108,7 @@
 ### 서명 생성 요청
 
 <details>
-<summary>🖼️ preview</summary>
+<summary>🖼️ 미리보기</summary>
   
 <br>
   
@@ -124,7 +124,7 @@
 ### 서명 생성 및 저장
 
 <details>
-<summary>🖼️ preview</summary>
+<summary>🖼️ 미리보기</summary>
   
 <br>
   
@@ -139,7 +139,7 @@
 ### 서명 목록 조회 및 이름 수정
 
 <details>
-<summary>🖼️ preview</summary>
+<summary>🖼️ 미리보기</summary>
   
 <br>
   
@@ -155,7 +155,7 @@
 ### 서명 연습 및 연습 기록 조회
 
 <details>
-<summary>🖼️ preview</summary>
+<summary>🖼️ 미리보기</summary>
   
 <br>
   
@@ -174,7 +174,7 @@
 ### 연습 기록 삭제
 
 <details>
-<summary>🖼️ preview</summary>
+<summary>🖼️ 미리보기</summary>
   
 <br>
   
@@ -190,7 +190,7 @@
 ### 서명 삭제 및 복구
 
 <details>
-<summary>🖼️ preview</summary>
+<summary>🖼️ 미리보기</summary>
   
 <br>
   
