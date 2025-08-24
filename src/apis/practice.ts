@@ -16,7 +16,7 @@ export const uploadPractice = async (file: File, signId: string) => {
 
     return response.data.detail;
   } catch (error: any) {
-    const message = error.response?.data?.message;
+    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
 
     alert(message);
   }
@@ -42,7 +42,7 @@ export const getPresignedUrl = async (keys: string[]) => {
 
     return response.data;
   } catch (error: any) {
-    const message = error.response?.data?.message;
+    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
 
     alert(message);
   }
@@ -73,6 +73,8 @@ export const deletePractices = async (fileNames: string[]) => {
 
     return response.data.code;
   } catch (error: any) {
-    alert(error.response.data.message);
+    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
+
+    alert(message);
   }
 };

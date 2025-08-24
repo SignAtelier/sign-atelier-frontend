@@ -29,7 +29,7 @@ export const getUserInfo = async () => {
       profilePicture: profile,
     };
   } catch (error: any) {
-    const data = error.response?.data;
+    const data = error.response?.data || "서버 오류가 발생했습니다";
 
     alert(data.message);
   }

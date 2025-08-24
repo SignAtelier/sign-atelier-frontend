@@ -15,7 +15,7 @@ export const generateSign = async (file: File, name: string) => {
 
     return response.data.detail;
   } catch (error: any) {
-    const message = error.response?.data?.message;
+    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
 
     alert(message);
   }

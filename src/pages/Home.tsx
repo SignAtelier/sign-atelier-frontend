@@ -84,6 +84,7 @@ const Home = () => {
                 const { setName, setFileBase64 } = useSignStore.getState();
 
                 setName(name);
+
                 if (typeof base64Data === "string") setFileBase64(base64Data);
 
                 const query = new URLSearchParams({ signUrl }).toString();

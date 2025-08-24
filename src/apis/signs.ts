@@ -13,7 +13,7 @@ export const saveSign = async (url: string) => {
 
     return response.data.status;
   } catch (error: any) {
-    const message = error.response?.data?.message;
+    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
 
     alert(message);
   }
@@ -44,7 +44,7 @@ export const editSignName = async (signId: string, newName: string) => {
 
     return response.data.editedSign;
   } catch (error: any) {
-    const message = error.response?.data?.message;
+    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
 
     alert(message);
   }
@@ -58,7 +58,7 @@ export const deleteSign = async (signId: string) => {
 
     return response.data.deletedSign;
   } catch (error: any) {
-    const message = error.response?.data?.message;
+    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
 
     alert(message);
   }
@@ -72,7 +72,7 @@ export const restoreSign = async (signId: string) => {
 
     return response.data.restoredSign;
   } catch (error: any) {
-    const message = error.response?.data?.message;
+    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
 
     alert(message);
 
@@ -86,7 +86,7 @@ export const deleteSignHard = async (signId: string) => {
       data: { sign_id: signId },
     });
   } catch (error: any) {
-    const message = error.response?.data?.message;
+    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
 
     alert(message);
   }
@@ -98,7 +98,7 @@ export const getSign = async (signId: string) => {
 
     return response.data.url;
   } catch (error: any) {
-    const message = error.response?.data?.message;
+    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
 
     alert(message);
   }
@@ -116,7 +116,7 @@ export const getSignOutline = async (
 
     return response.data;
   } catch (error: any) {
-    const message = error.response?.data?.message;
+    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
 
     alert(message);
   }
