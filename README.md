@@ -3,14 +3,13 @@
 이 프로젝트는 사용자가 입력한 이름과 업로드한 서명 이미지의 스타일을 결합해, 나만의 서명을 생성하는 AI 기반 서비스입니다.
 기존 서명 생성기는 폰트 기반이라 항상 같은 결과를 출력하고, 연습 환경도 제공하지 않아 실제 사용에 한계가 있었습니다.
 
-이 서비스는 AI로 스타일을 반영해 매번 새로운 서명을 생성하고 저장할 수 있으며, 연습 기능을 통해 따라 쓴 서명의 유사도를 점수로 확인하고 원하는 서명을 .png 파일로 내려받을 수 있습니다.
+이 서비스는 AI로 스타일을 반영해 매번 새로운 서명을 생성하고 저장할 수 있으며, 연습 기능을 통해 따라 쓴 서명의 유사도를 점수로 확인하고 원하는 서명을 이미지 파일로 내려받을 수 있습니다.
 
 ## 🔗 링크
 
 <p align="center">
-  <a href="https://signatelier.com/">웹사이트</a> &nbsp;|&nbsp;
-  <a href="https://github.com/SignAtelier/sign-atelier-backend">서버 레포지토리</a> &nbsp;|&nbsp;
-  <a href="https://signatelier.com">배포 링크</a>
+  <a href="https://drive.google.com/file/d/1uowMcLHmCMAQ7fSwSZloHduCSGOCY_PQ/view?usp=sharing">시연 영상</a> &nbsp;|&nbsp;
+  <a href="https://github.com/SignAtelier/sign-atelier-backend">서버 레포지토리</a>
 </p>
 
 ## ⚙️ 레포지토리 구성 및 역할
