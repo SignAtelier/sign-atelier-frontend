@@ -1,6 +1,12 @@
+export type SignatureStyle =
+  | "luxury"
+  | "calligraphy"
+  | "simple"
+  | "sharp";
+
 export interface GenerateParams {
-  file: File;
   name: string;
+  style: SignatureStyle;
 }
 
 export interface Practice {

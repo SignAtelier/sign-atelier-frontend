@@ -6,14 +6,16 @@ const HeaderNav = () => {
   const { userInfo } = useUserStore();
 
   return (
-    <nav className="flex gap-10 font-semibold text-gray-600">
+    <nav className="flex gap-8 text-base font-semibold text-stone-600">
       <button
+        type="button"
         onClick={() => navigate("/")}
-        className="cursor-pointer hover:text-black transition"
+        className="cursor-pointer transition hover:text-stone-950"
       >
-        싸인 생성
+        싸인 만들기
       </button>
       <button
+        type="button"
         onClick={() => {
           if (!userInfo) {
             alert("로그인이 필요합니다.");
@@ -23,9 +25,9 @@ const HeaderNav = () => {
 
           navigate("/signature/list");
         }}
-        className="cursor-pointer hover:text-black transition"
+        className="cursor-pointer transition hover:text-stone-950"
       >
-        싸인 목록
+        보관함
       </button>
     </nav>
   );

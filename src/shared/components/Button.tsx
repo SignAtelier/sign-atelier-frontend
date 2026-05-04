@@ -4,12 +4,12 @@ const Button = ({
   children,
   onClick,
   disabled = false,
-  style = "bg-[#3a5afe] text-white",
-  padding = "py-2",
+  style = "bg-stone-950 text-white hover:bg-stone-800 shadow-sm",
+  padding = "py-3",
 }: ButtonProps) => {
   return (
     <button
-      className={`w-full rounded-lg cursor-pointer ${style} ${padding}`}
+      className={`w-full rounded-md cursor-pointer font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 ${style} ${padding}`}
       onClick={onClick}
       disabled={disabled}
     >

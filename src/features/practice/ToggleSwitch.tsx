@@ -6,10 +6,10 @@ const ToggleSwitch = ({ label, checked, onToggle }: ToggleSwitchProps) => {
       className="flex items-center gap-2 cursor-pointer select-none"
       onClick={onToggle}
     >
-      <span className="text-sm text-gray-600">{label}</span>
+      <span className="text-sm text-stone-600">{label}</span>
       <div
         className={`w-10 h-6 flex items-center rounded-full p-1 transition-all ${
-          checked ? "bg-[#3A5AFE]" : "bg-gray-300"
+          checked ? "bg-stone-900" : "bg-stone-300"
         }`}
       >
         <div

@@ -9,7 +9,7 @@ const Selector = ({
 }: SelectorProps) => {
   return (
     <div className="flex jusitfy-center items-center gap-4">
-      <label className="text-sm text-gray-600 mb-1 block">{children}</label>
+      <label className="mb-1 block text-sm text-stone-600">{children}</label>
       <Select
         options={options}
         styles={{
@@ -23,8 +23,8 @@ const Selector = ({
           }),
           option: (provided, state) => ({
             ...provided,
-            backgroundColor: state.isFocused ? "#3A5AFE" : "white",
-            color: state.isFocused ? "white" : "black",
+            backgroundColor: state.isFocused ? "#292524" : "white",
+            color: state.isFocused ? "#fffaf1" : "#1c1917",
           }),
         }}
         isSearchable={false}
