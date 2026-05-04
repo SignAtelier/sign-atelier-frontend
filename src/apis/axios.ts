@@ -1,8 +1,11 @@
 import axios, { type AxiosInstance } from "axios";
 import { useUserStore } from "../store/userStore";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? "https://5ec0ae27d9fa.ngrok-free.app";
+
 const authAxios: AxiosInstance = axios.create({
-  baseURL: "https://5ec0ae27d9fa.ngrok-free.app",
+  baseURL: API_BASE_URL,
   withCredentials: true,
 });
 
@@ -28,9 +31,13 @@ authAxios.interceptors.response.use(
       originalConfig._retry = true;
 
       try {
-        const refeshResponse = await axios.post("/api/auth/refresh", null, {
-          withCredentials: true,
-        });
+        const refeshResponse = await axios.post(
+          `${API_BASE_URL}/api/auth/refresh`,
+          null,
+          {
+            withCredentials: true,
+          }
+        );
 
         const newAccessToken = refeshResponse.data.accessToken;
 

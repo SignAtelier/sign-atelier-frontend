@@ -2,10 +2,25 @@ import axios from "axios";
 import { useUserStore } from "../store/userStore";
 import authAxios from "./axios";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? "https://5ec0ae27d9fa.ngrok-free.app";
+
+export const loginWithGoogleCredential = async (credential: string) => {
+  const response = await axios.post(
+    `${API_BASE_URL}/api/auth/google`,
+    { credential },
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data.accessToken as string;
+};
+
 export const getAccessToken = async () => {
   try {
     const response = await axios.post(
-      "https://5ec0ae27d9fa.ngrok-free.app/api/auth/refresh",
+      `${API_BASE_URL}/api/auth/refresh`,
       null,
       {
         withCredentials: true,
