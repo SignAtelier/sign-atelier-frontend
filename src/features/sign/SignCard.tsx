@@ -10,7 +10,7 @@ import {
 } from "../../apis/signs";
 import Button from "../../shared/components/Button";
 import Toast from "../../shared/components/Toast";
-import { formatDate } from "../../shared/utils/foramtDate";
+import { formatDate } from "../../shared/utils/formatDate";
 import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
 import type { SignProps } from "./types";

@@ -7,13 +7,13 @@ interface SignState {
   style: SignatureStyle;
 }
 
-interface SignAtions {
+interface SignActions {
   setName: (name: string) => void;
   setStyle: (style: SignatureStyle) => void;
   clearAll: () => void;
 }
 
-export const useSignStore = create<SignState & SignAtions>()(
+export const useSignStore = create<SignState & SignActions>()(
   persist(
     (set) => ({
       name: "",

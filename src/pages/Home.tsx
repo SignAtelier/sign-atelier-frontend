@@ -258,7 +258,9 @@ const Home = () => {
         </section>
       </main>
 
-      {isLoading && <Loading>싸인을 생성하고 있습니다</Loading>}
+      {isLoading && (
+        <Loading variant="signature">싸인을 생성하고 있습니다</Loading>
+      )}
     </div>
   );
 };

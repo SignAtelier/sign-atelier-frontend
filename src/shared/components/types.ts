@@ -26,6 +26,7 @@ export interface UserMenuProps {
 
 export interface LoadingProps {
   children: ReactNode;
+  variant?: "default" | "signature";
 }
 
 export interface ToastProps {

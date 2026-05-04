@@ -8,10 +8,14 @@ import Header from "../shared/components/Header";
 import Loading from "../shared/components/Loading";
 import { useSignStore } from "../store/signStore";
 
+type LoadingVariant = "default" | "signature";
+
 const SignatureResult = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] =
     useState("싸인을 생성하고 있습니다");
+  const [loadingVariant, setLoadingVariant] =
+    useState<LoadingVariant>("signature");
 
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -21,6 +25,7 @@ const SignatureResult = () => {
     if (!signUrl) return;
 
     setLoadingMessage("싸인을 보관함에 저장하고 있습니다");
+    setLoadingVariant("default");
     setIsLoading(true);
 
     const status = await saveSign(signUrl);
@@ -30,6 +35,7 @@ const SignatureResult = () => {
     }
 
     setLoadingMessage("싸인을 생성하고 있습니다");
+    setLoadingVariant("signature");
     setIsLoading(false);
   };
 
@@ -42,6 +48,8 @@ const SignatureResult = () => {
       return;
     }
 
+    setLoadingMessage("싸인을 생성하고 있습니다");
+    setLoadingVariant("signature");
     setIsLoading(true);
 
     const nextSignUrl = await generateSign(name, style);
@@ -112,7 +120,9 @@ const SignatureResult = () => {
         </section>
       </main>
 
-      {isLoading && <Loading>{loadingMessage}</Loading>}
+      {isLoading && (
+        <Loading variant={loadingVariant}>{loadingMessage}</Loading>
+      )}
     </div>
   );
 };
