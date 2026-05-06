@@ -1,4 +1,5 @@
 import authAxios from "./axios";
+import { getApiErrorCode, getApiErrorMessage } from "./error";
 
 export const saveSign = async (url: string) => {
   try {
@@ -12,10 +13,8 @@ export const saveSign = async (url: string) => {
     const response = await authAxios.post("/api/signs/upload", formData);
 
     return response.data.status;
-  } catch (error: any) {
-    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
-
-    alert(message);
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
   }
 };
 
@@ -26,10 +25,8 @@ export const getSignsByStatus = async (isDeleted: boolean) => {
     });
 
     return response.data.signs;
-  } catch (error: any) {
-    const message = error.response?.data?.message;
-
-    alert(message);
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
   }
 };
 
@@ -43,10 +40,8 @@ export const editSignName = async (signId: string, newName: string) => {
     const response = await authAxios.patch("/api/signs/name", formData);
 
     return response.data.editedSign;
-  } catch (error: any) {
-    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
-
-    alert(message);
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
   }
 };
 
@@ -57,10 +52,8 @@ export const deleteSign = async (signId: string) => {
     });
 
     return response.data.deletedSign;
-  } catch (error: any) {
-    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
-
-    alert(message);
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
   }
 };
 
@@ -71,12 +64,10 @@ export const restoreSign = async (signId: string) => {
     });
 
     return response.data.restoredSign;
-  } catch (error: any) {
-    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
 
-    alert(message);
-
-    return error.response?.data?.code;
+    return getApiErrorCode(error);
   }
 };
 
@@ -85,10 +76,8 @@ export const deleteSignHard = async (signId: string) => {
     await authAxios.delete("/api/signs/hard", {
       data: { sign_id: signId },
     });
-  } catch (error: any) {
-    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
-
-    alert(message);
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
   }
 };
 
@@ -97,10 +86,8 @@ export const getSign = async (signId: string) => {
     const response = await authAxios.get(`/api/signs/sign/${signId}`);
 
     return response.data.url;
-  } catch (error: any) {
-    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
-
-    alert(message);
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
   }
 };
 
@@ -115,9 +102,7 @@ export const getSignOutline = async (
     );
 
     return response.data;
-  } catch (error: any) {
-    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
-
-    alert(message);
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
   }
 };

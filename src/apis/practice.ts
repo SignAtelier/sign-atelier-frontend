@@ -1,5 +1,6 @@
 import axios from "axios";
 import authAxios from "./axios";
+import { getApiErrorMessage } from "./error";
 
 export const uploadPractice = async (file: File, signId: string) => {
   try {
@@ -15,10 +16,8 @@ export const uploadPractice = async (file: File, signId: string) => {
     });
 
     return response.data.detail;
-  } catch (error: any) {
-    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
-
-    alert(message);
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
   }
 };
 
@@ -29,10 +28,8 @@ export const getPractices = async (signId: string) => {
     );
 
     return response.data;
-  } catch (error: any) {
-    const message = error.response?.data?.message;
-
-    alert(message);
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
   }
 };
 
@@ -41,10 +38,8 @@ export const getPresignedUrl = async (keys: string[]) => {
     const response = await authAxios.post("/api/s3/presigned", keys);
 
     return response.data;
-  } catch (error: any) {
-    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
-
-    alert(message);
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
   }
 };
 
@@ -60,8 +55,8 @@ export const downloadPractice = async (url: string) => {
     a.click();
     URL.revokeObjectURL(a.href);
     document.body.removeChild(a);
-  } catch {
-    alert("다운로드 링크 만료. 새로고침 해주세요");
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error, "다운로드 링크 만료. 새로고침 해주세요"));
   }
 };
 
@@ -72,9 +67,7 @@ export const deletePractices = async (fileNames: string[]) => {
     });
 
     return response.data.code;
-  } catch (error: any) {
-    const message = error.response?.data?.message || "서버 오류가 발생했습니다";
-
-    alert(message);
+  } catch (error: unknown) {
+    alert(getApiErrorMessage(error));
   }
 };
