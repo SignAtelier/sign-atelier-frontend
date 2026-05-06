@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { getApiErrorMessage } from "../../apis/error";
 import { deletePractices } from "../../apis/practice";
 import type { Practice } from "../../apis/types";
 import Button from "../../shared/components/Button";
+import { useToast } from "../../shared/components/ToastProvider";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import DownloadModal from "./DownloadModal";
 import type { PracticeRecordsProps } from "./types";
@@ -18,6 +20,7 @@ const PracticeRecords = ({
   const [deleteList, setDeleteList] = useState<Practice[]>([]);
   const [isSelectMode, setIsSelectMode] = useState<boolean>(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const { showToast } = useToast();
 
   const handlePracticeClick = (practice: Practice) => {
     setSelectedPractice(practice);
@@ -28,17 +31,22 @@ const PracticeRecords = ({
 
   const handleDeletePractices = async () => {
     const fileNames = deleteList.map((practice) => practice.fileName);
-    const responseCode = await deletePractices(fileNames);
+    try {
+      const responseCode = await deletePractices(fileNames);
 
-    if (responseCode === "DELETE_SUCCESS") {
-      const updated = practices.filter(
-        (practice) => !deleteList.includes(practice)
-      );
+      if (responseCode === "DELETE_SUCCESS") {
+        const updated = practices.filter(
+          (practice) => !deleteList.includes(practice)
+        );
 
-      onUpdatePractices(updated);
-      setDeleteList([]);
-      setIsSelectMode(false);
-      setIsDeleteConfirmOpen(false);
+        onUpdatePractices(updated);
+        setDeleteList([]);
+        setIsSelectMode(false);
+        setIsDeleteConfirmOpen(false);
+        showToast({ type: "success", message: "연습 기록을 삭제했습니다." });
+      }
+    } catch (error: unknown) {
+      showToast({ type: "error", message: getApiErrorMessage(error) });
     }
   };
 

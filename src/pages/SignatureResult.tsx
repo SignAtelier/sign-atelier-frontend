@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { LuArchive, LuRefreshCw } from "react-icons/lu";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { getApiErrorMessage } from "../apis/error";
 import { generateSign } from "../apis/generateSign";
 import { saveSign } from "../apis/signs";
 import Button from "../shared/components/Button";
 import Header from "../shared/components/Header";
 import Loading from "../shared/components/Loading";
+import { useToast } from "../shared/components/ToastProvider";
 import { useSignStore } from "../store/signStore";
 
 type LoadingVariant = "default" | "signature";
@@ -18,6 +20,7 @@ const SignatureResult = () => {
     useState<LoadingVariant>("signature");
 
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [params] = useSearchParams();
   const signUrl = params.get("signUrl");
 
@@ -28,15 +31,20 @@ const SignatureResult = () => {
     setLoadingVariant("default");
     setIsLoading(true);
 
-    const status = await saveSign(signUrl);
+    try {
+      const status = await saveSign(signUrl);
 
-    if (status === 201) {
-      navigate("/signature/list");
+      if (status === 201) {
+        showToast({ type: "success", message: "싸인을 보관함에 저장했습니다." });
+        navigate("/signature/list");
+      }
+    } catch (error: unknown) {
+      showToast({ type: "error", message: getApiErrorMessage(error) });
+    } finally {
+      setLoadingMessage("싸인을 생성하고 있습니다");
+      setLoadingVariant("signature");
+      setIsLoading(false);
     }
-
-    setLoadingMessage("싸인을 생성하고 있습니다");
-    setLoadingVariant("signature");
-    setIsLoading(false);
   };
 
   const handleRegenerate = async () => {
@@ -52,18 +60,17 @@ const SignatureResult = () => {
     setLoadingVariant("signature");
     setIsLoading(true);
 
-    const nextSignUrl = await generateSign(name, style);
+    try {
+      const nextSignUrl = await generateSign(name, style);
 
-    if (!nextSignUrl) {
       setIsLoading(false);
+      const query = new URLSearchParams({ signUrl: nextSignUrl }).toString();
 
-      return;
+      navigate(`/signature/result?${query}`);
+    } catch (error: unknown) {
+      showToast({ type: "error", message: getApiErrorMessage(error) });
+      setIsLoading(false);
     }
-
-    const query = new URLSearchParams({ signUrl: nextSignUrl }).toString();
-
-    setIsLoading(false);
-    navigate(`/signature/result?${query}`);
   };
 
   return (

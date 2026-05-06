@@ -1,13 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../apis/auth";
+import { getApiErrorMessage } from "../../apis/error";
 import type { UserMenuProps } from "./types";
+import { useToast } from "./ToastProvider";
 
 const UserMenu = ({ onCloseMenu }: UserMenuProps) => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const handleLogout = async () => {
-    await logout();
-    navigate("/");
+    try {
+      await logout();
+      showToast({ type: "success", message: "로그아웃했습니다." });
+      navigate("/");
+    } catch (error: unknown) {
+      showToast({ type: "error", message: getApiErrorMessage(error) });
+    }
   };
 
   return (

@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store/userStore";
+import { useToast } from "./ToastProvider";
 
 const HeaderNav = () => {
   const navigate = useNavigate();
   const { userInfo } = useUserStore();
+  const { showToast } = useToast();
 
   return (
     <nav className="flex gap-8 text-base font-semibold text-stone-600">
@@ -18,7 +20,7 @@ const HeaderNav = () => {
         type="button"
         onClick={() => {
           if (!userInfo) {
-            alert("로그인이 필요합니다.");
+            showToast({ type: "info", message: "로그인이 필요합니다." });
 
             return;
           }

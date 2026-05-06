@@ -4,17 +4,20 @@ import Home from "./pages/Home";
 import Practices from "./pages/Practices";
 import SignatureList from "./pages/SignatureList";
 import SignatureResult from "./pages/SignatureResult";
+import { ToastProvider } from "./shared/components/ToastProvider";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signature/result" element={<SignatureResult />} />
-        <Route path="/signature/list" element={<SignatureList />} />
-        <Route path="/signature/practice/:sign_id" element={<Practices />} />
-      </Routes>
-    </Router>
+    <ToastProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signature/result" element={<SignatureResult />} />
+          <Route path="/signature/list" element={<SignatureList />} />
+          <Route path="/signature/practice/:sign_id" element={<Practices />} />
+        </Routes>
+      </Router>
+    </ToastProvider>
   );
 }
 

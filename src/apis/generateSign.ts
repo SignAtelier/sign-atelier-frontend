@@ -1,5 +1,5 @@
 import authAxios from "./axios";
-import { getApiErrorMessage } from "./error";
+import { throwApiError } from "./error";
 import type { SignatureStyle } from "./types";
 
 export const generateSign = async (name: string, style: SignatureStyle) => {
@@ -17,6 +17,6 @@ export const generateSign = async (name: string, style: SignatureStyle) => {
 
     return response.data.detail;
   } catch (error: unknown) {
-    alert(getApiErrorMessage(error));
+    throwApiError(error);
   }
 };

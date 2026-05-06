@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAccessToken, getUserInfo } from '../apis/auth';
+import { getApiErrorMessage } from '../apis/error';
 import { generateSign } from '../apis/generateSign';
 import type { SignatureStyle } from '../apis/types';
 import HomeHero from '../features/home/HomeHero';
@@ -9,6 +10,7 @@ import ProcessStepList from '../features/home/ProcessStepList';
 import SignCreationPanel from '../features/home/SignCreationPanel';
 import Header from '../shared/components/Header';
 import Loading from '../shared/components/Loading';
+import { useToast } from '../shared/components/ToastProvider';
 import { useSignStore } from '../store/signStore';
 import { useUserStore } from '../store/userStore';
 
@@ -18,6 +20,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { accessToken } = useUserStore();
+  const { showToast } = useToast();
 
   const navigate = useNavigate();
 
@@ -28,56 +31,62 @@ const Home = () => {
     (async () => {
       const store = useUserStore.getState();
 
-      if (!accessToken) {
-        const token = await getAccessToken();
+      try {
+        if (!accessToken) {
+          const token = await getAccessToken();
 
-        if (!token) {
-          store.clearAll();
+          if (!token) {
+            store.clearAll();
 
-          return;
+            return;
+          }
+
+          store.setAccessToken(token);
         }
 
-        store.setAccessToken(token);
+        const userInfo = await getUserInfo();
+
+        if (userInfo) store.setUserInfo(userInfo);
+      } catch (error: unknown) {
+        store.clearAll();
+        showToast({ type: 'error', message: getApiErrorMessage(error) });
       }
-
-      const userInfo = await getUserInfo();
-
-      if (userInfo) store.setUserInfo(userInfo);
     })();
-  }, [accessToken]);
+  }, [accessToken, showToast]);
 
   const handleGenerate = async () => {
     if (!name.trim()) {
-      alert('영문 이름을 입력해 주세요.');
+      showToast({ type: 'error', message: '영문 이름을 입력해 주세요.' });
 
       return;
     }
 
     if (!selectedStyle) {
-      alert('스타일을 선택해 주세요.');
+      showToast({ type: 'error', message: '스타일을 선택해 주세요.' });
 
       return;
     }
 
     setIsLoading(true);
 
-    const signUrl = await generateSign(name, selectedStyle);
+    try {
+      const signUrl = await generateSign(name, selectedStyle);
 
-    if (!signUrl) {
+      const { setName: setStoredName, setStyle } = useSignStore.getState();
+
+      setStoredName(name);
+      setStyle(selectedStyle);
+
+      const query = new URLSearchParams({ signUrl }).toString();
+
+      setIsLoading(false);
+      navigate(`/signature/result?${query}`);
+    } catch (error: unknown) {
+      showToast({ type: 'error', message: getApiErrorMessage(error) });
       setIsLoading(false);
 
       return;
     }
-
-    const { setName: setStoredName, setStyle } = useSignStore.getState();
-
-    setStoredName(name);
-    setStyle(selectedStyle);
-
-    const query = new URLSearchParams({ signUrl }).toString();
-
-    setIsLoading(false);
-    navigate(`/signature/result?${query}`);
   };
 
   const canSubmit = Boolean(name.trim() && selectedStyle && !isLoading);

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { FaCaretDown, FaCaretRight } from "react-icons/fa6";
+import { getApiErrorMessage } from "../apis/error";
 import { getSignsByStatus } from "../apis/signs";
 import SignCard from "../features/sign/SignCard";
 import Header from "../shared/components/Header";
 import Loading from "../shared/components/Loading";
+import { useToast } from "../shared/components/ToastProvider";
 
 interface Sign {
   id: string;
@@ -20,6 +22,7 @@ const SignatureList = () => {
   const [deletedSigns, setDeletedSigns] = useState<Sign[]>([]);
   const [showDeleted, setShowDeleted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { showToast } = useToast();
 
   const updateSignName = ({ id, name, updatedAt }: Sign) => {
     setActiveSigns((prevSigns) =>
@@ -72,23 +75,33 @@ const SignatureList = () => {
     setIsLoading(true);
 
     (async () => {
-      const activeList = await getSignsByStatus(false);
+      try {
+        const activeList = await getSignsByStatus(false);
 
-      setActiveSigns(activeList);
-      setIsLoading(false);
+        setActiveSigns(activeList);
+      } catch (error: unknown) {
+        showToast({ type: "error", message: getApiErrorMessage(error) });
+      } finally {
+        setIsLoading(false);
+      }
     })();
-  }, []);
+  }, [showToast]);
 
   useEffect(() => {
     setIsLoading(true);
 
     (async () => {
-      const deletedList = await getSignsByStatus(true);
+      try {
+        const deletedList = await getSignsByStatus(true);
 
-      setDeletedSigns(deletedList);
-      setIsLoading(false);
+        setDeletedSigns(deletedList);
+      } catch (error: unknown) {
+        showToast({ type: "error", message: getApiErrorMessage(error) });
+      } finally {
+        setIsLoading(false);
+      }
     })();
-  }, []);
+  }, [showToast]);
 
   return (
     <div className="size-full">

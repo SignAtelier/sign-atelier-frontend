@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { MdModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { ApiError, getApiErrorMessage } from "../../apis/error";
 import {
   deleteSign,
   deleteSignHard,
@@ -10,6 +11,7 @@ import {
 } from "../../apis/signs";
 import Button from "../../shared/components/Button";
 import Toast from "../../shared/components/Toast";
+import { useToast } from "../../shared/components/ToastProvider";
 import { formatDate } from "../../shared/utils/formatDate";
 import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
@@ -28,6 +30,7 @@ const SignCard = ({
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const openEditModal = () => {
     setName(sign.name);
@@ -43,23 +46,38 @@ const SignCard = ({
   };
 
   const handleEdit = async (signId: string, newName: string) => {
-    const editSign = await editSignName(signId, newName);
+    try {
+      const editSign = await editSignName(signId, newName);
 
-    onUpdateName?.(editSign);
-    setIsEditing(false);
+      onUpdateName?.(editSign);
+      setIsEditing(false);
+      showToast({ type: "success", message: "싸인 이름을 수정했습니다." });
+    } catch (error: unknown) {
+      showToast({ type: "error", message: getApiErrorMessage(error) });
+    }
   };
 
   const handleSoftDelete = async (signId: string) => {
-    const sign = await deleteSign(signId);
+    try {
+      const sign = await deleteSign(signId);
 
-    onSoftDelete?.(sign);
-    setIsDeleteConfirmOpen(false);
+      onSoftDelete?.(sign);
+      setIsDeleteConfirmOpen(false);
+      showToast({ type: "success", message: "싸인을 삭제했습니다." });
+    } catch (error: unknown) {
+      showToast({ type: "error", message: getApiErrorMessage(error) });
+    }
   };
 
   const handleHardDelete = async (signId: string) => {
-    await deleteSignHard(signId);
+    try {
+      await deleteSignHard(signId);
 
-    onHardDelete?.(signId);
+      onHardDelete?.(signId);
+      showToast({ type: "success", message: "싸인을 완전히 삭제했습니다." });
+    } catch (error: unknown) {
+      showToast({ type: "error", message: getApiErrorMessage(error) });
+    }
   };
 
   return (
@@ -109,15 +127,20 @@ const SignCard = ({
               padding="py-1"
               style="bg-green-50 text-green-600"
               onClick={async () => {
-                const restoredSign = await restoreSign(sign.id);
+                try {
+                  const restoredSign = await restoreSign(sign.id);
 
-                if (restoredSign === "ALREADY_DELETED") {
-                  onHardDelete?.(sign.id);
+                  onRestore?.(restoredSign);
+                  showToast({ type: "success", message: "싸인을 복구했습니다." });
+                } catch (error: unknown) {
+                  const message = getApiErrorMessage(error);
 
-                  return;
+                  if (error instanceof ApiError && error.code === "ALREADY_DELETED") {
+                    onHardDelete?.(sign.id);
+                  }
+
+                  showToast({ type: "error", message });
                 }
-
-                onRestore?.(restoredSign);
               }}
             >
               복구하기

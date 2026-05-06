@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getApiErrorMessage } from "../apis/error";
 import { getPractices, getPresignedUrl } from "../apis/practice";
 import { getSign, getSignOutline } from "../apis/signs";
 import PracticeCanvas from "../features/practice/PracticeCanvas";
@@ -7,6 +8,7 @@ import PracticeRecords from "../features/practice/PracticeRecords";
 import SignBox from "../features/practice/SignBox";
 import type { Practice } from "../features/practice/types";
 import Header from "../shared/components/Header";
+import { useToast } from "../shared/components/ToastProvider";
 import { blobToCanvas } from "../shared/utils/convert";
 
 const options = [
@@ -32,70 +34,81 @@ const Practices = () => {
   const skeletonImageRef = useRef<HTMLImageElement | null>(null);
   const { sign_id } = useParams();
   const signId = sign_id;
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (!signId) return;
 
     (async () => {
-      const practicesList = await getPractices(signId);
+      try {
+        const practicesList = await getPractices(signId);
 
-      if (practicesList.length === 0) return;
+        if (practicesList.length === 0) return;
 
-      const keys = practicesList.map((practice: Practice) => practice.fileName);
-      const urls = await getPresignedUrl(keys);
-      const updatedPractices = practicesList.map(
-        (practice: Practice, i: number) => ({
-          ...practice,
-          url: urls[i],
-        })
-      );
-
-      setPractices(updatedPractices);
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (!signId) return;
-
-    (async () => {
-      const signUrl = await getSign(signId);
-
-      if (!signUrl) return;
-
-      setSignUrl(signUrl);
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (!signId) return;
-
-    (async () => {
-      const responseData = await getSignOutline(
-        signId,
-        selectedSize.value.width,
-        selectedSize.value.height
-      );
-      const outlineUrl = responseData.url;
-      const skeletonBase64 = responseData.skeleton;
-
-      if (outlineUrl) {
-        setSignOutlineUrl(outlineUrl);
-      }
-
-      if (skeletonBase64) {
-        const binary = atob(skeletonBase64);
-        const byteArray = new Uint8Array(
-          [...binary].map((character) => character.charCodeAt(0))
+        const keys = practicesList.map((practice: Practice) => practice.fileName);
+        const urls = await getPresignedUrl(keys);
+        const updatedPractices = practicesList.map(
+          (practice: Practice, i: number) => ({
+            ...practice,
+            url: urls[i],
+          })
         );
-        const blob = new Blob([byteArray], { type: "image/png" });
 
-        const { canvas, image } = await blobToCanvas(blob);
-
-        skeletonImageRef.current = image;
-        skeletonCanvasRef.current = canvas;
+        setPractices(updatedPractices);
+      } catch (error: unknown) {
+        showToast({ type: "error", message: getApiErrorMessage(error) });
       }
     })();
-  }, []);
+  }, [signId, showToast]);
+
+  useEffect(() => {
+    if (!signId) return;
+
+    (async () => {
+      try {
+        const signUrl = await getSign(signId);
+
+        setSignUrl(signUrl);
+      } catch (error: unknown) {
+        showToast({ type: "error", message: getApiErrorMessage(error) });
+      }
+    })();
+  }, [signId, showToast]);
+
+  useEffect(() => {
+    if (!signId) return;
+
+    (async () => {
+      try {
+        const responseData = await getSignOutline(
+          signId,
+          selectedSize.value.width,
+          selectedSize.value.height
+        );
+        const outlineUrl = responseData.url;
+        const skeletonBase64 = responseData.skeleton;
+
+        if (outlineUrl) {
+          setSignOutlineUrl(outlineUrl);
+        }
+
+        if (skeletonBase64) {
+          const binary = atob(skeletonBase64);
+          const byteArray = new Uint8Array(
+            [...binary].map((character) => character.charCodeAt(0))
+          );
+          const blob = new Blob([byteArray], { type: "image/png" });
+
+          const { canvas, image } = await blobToCanvas(blob);
+
+          skeletonImageRef.current = image;
+          skeletonCanvasRef.current = canvas;
+        }
+      } catch (error: unknown) {
+        showToast({ type: "error", message: getApiErrorMessage(error) });
+      }
+    })();
+  }, [signId, selectedSize.value.height, selectedSize.value.width, showToast]);
 
   useEffect(() => {
     if (!skeletonCanvasRef.current || !skeletonImageRef.current) return;

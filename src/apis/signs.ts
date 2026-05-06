@@ -1,5 +1,5 @@
 import authAxios from "./axios";
-import { getApiErrorCode, getApiErrorMessage } from "./error";
+import { throwApiError } from "./error";
 
 export const saveSign = async (url: string) => {
   try {
@@ -14,7 +14,7 @@ export const saveSign = async (url: string) => {
 
     return response.data.status;
   } catch (error: unknown) {
-    alert(getApiErrorMessage(error));
+    throwApiError(error);
   }
 };
 
@@ -26,7 +26,7 @@ export const getSignsByStatus = async (isDeleted: boolean) => {
 
     return response.data.signs;
   } catch (error: unknown) {
-    alert(getApiErrorMessage(error));
+    throwApiError(error);
   }
 };
 
@@ -41,7 +41,7 @@ export const editSignName = async (signId: string, newName: string) => {
 
     return response.data.editedSign;
   } catch (error: unknown) {
-    alert(getApiErrorMessage(error));
+    throwApiError(error);
   }
 };
 
@@ -53,7 +53,7 @@ export const deleteSign = async (signId: string) => {
 
     return response.data.deletedSign;
   } catch (error: unknown) {
-    alert(getApiErrorMessage(error));
+    throwApiError(error);
   }
 };
 
@@ -65,9 +65,7 @@ export const restoreSign = async (signId: string) => {
 
     return response.data.restoredSign;
   } catch (error: unknown) {
-    alert(getApiErrorMessage(error));
-
-    return getApiErrorCode(error);
+    throwApiError(error);
   }
 };
 
@@ -77,7 +75,7 @@ export const deleteSignHard = async (signId: string) => {
       data: { sign_id: signId },
     });
   } catch (error: unknown) {
-    alert(getApiErrorMessage(error));
+    throwApiError(error);
   }
 };
 
@@ -87,7 +85,7 @@ export const getSign = async (signId: string) => {
 
     return response.data.url;
   } catch (error: unknown) {
-    alert(getApiErrorMessage(error));
+    throwApiError(error);
   }
 };
 
@@ -103,6 +101,6 @@ export const getSignOutline = async (
 
     return response.data;
   } catch (error: unknown) {
-    alert(getApiErrorMessage(error));
+    throwApiError(error);
   }
 };

@@ -19,6 +19,10 @@ export const getApiErrorMessage = (
     }
   }
 
+  if (error instanceof Error && error.message.trim()) {
+    return error.message;
+  }
+
   return fallbackMessage;
 };
 
@@ -28,4 +32,24 @@ export const getApiErrorCode = (error: unknown) => {
   const code = error.response?.data?.code;
 
   return typeof code === "string" ? code : undefined;
+};
+
+export class ApiError extends Error {
+  code?: string;
+
+  constructor(message: string, code?: string) {
+    super(message);
+    this.name = "ApiError";
+    this.code = code;
+  }
+}
+
+export const throwApiError = (
+  error: unknown,
+  fallbackMessage?: string
+): never => {
+  throw new ApiError(
+    getApiErrorMessage(error, fallbackMessage),
+    getApiErrorCode(error)
+  );
 };

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useUserStore } from "../store/userStore";
 import authAxios from "./axios";
-import { getApiErrorMessage } from "./error";
+import { throwApiError } from "./error";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? "https://5ec0ae27d9fa.ngrok-free.app";
@@ -45,7 +45,7 @@ export const getUserInfo = async () => {
       profilePicture: profile,
     };
   } catch (error: unknown) {
-    alert(getApiErrorMessage(error));
+    throwApiError(error);
   }
 };
 
@@ -57,6 +57,6 @@ export const logout = async () => {
 
     store.clearAll();
   } catch (error: unknown) {
-    alert(getApiErrorMessage(error, "로그아웃에 실패했습니다."));
+    throwApiError(error, "로그아웃에 실패했습니다.");
   }
 };

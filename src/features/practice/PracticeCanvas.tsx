@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getApiErrorMessage } from "../../apis/error";
 import { getPresignedUrl, uploadPractice } from "../../apis/practice";
 import Button from "../../shared/components/Button";
 import Loader from "../../shared/components/Loader";
+import { useToast } from "../../shared/components/ToastProvider";
 import Canvas from "./Canvas";
 import type { PracticeCanvasProps } from "./types";
 
@@ -20,6 +22,7 @@ const PracticeCanvas = ({
   const [score, setScore] = useState<number>(0);
   const { sign_id } = useParams();
   const signId = sign_id;
+  const { showToast } = useToast();
 
   const isCanvasBlank = (canvas: HTMLCanvasElement) => {
     const ctx = canvas.getContext("2d");
@@ -55,12 +58,19 @@ const PracticeCanvas = ({
       return;
 
     canvasRef.current.toBlob(async (blob) => {
-      const file = new File([blob!], "practice.png", { type: "png" });
-      const practice = await uploadPractice(file, signId);
-      const url = await getPresignedUrl([practice.fileName]);
+      if (!blob) return;
 
-      practice.url = url;
-      onUpdatePractices([practice, ...practices]);
+      try {
+        const file = new File([blob], "practice.png", { type: "png" });
+        const practice = await uploadPractice(file, signId);
+        const url = await getPresignedUrl([practice.fileName]);
+
+        practice.url = url;
+        onUpdatePractices([practice, ...practices]);
+        showToast({ type: "success", message: "연습 기록을 저장했습니다." });
+      } catch (error: unknown) {
+        showToast({ type: "error", message: getApiErrorMessage(error) });
+      }
     });
 
     handleClear();
