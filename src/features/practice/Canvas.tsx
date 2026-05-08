@@ -48,8 +48,21 @@ const Canvas = ({
 
     if (!canvas || !ctx) return;
 
-    const handleMouseDown = (e: MouseEvent) => {
-      const point = { x: e.offsetX, y: e.offsetY };
+    const getCanvasPoint = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY,
+      };
+    };
+
+    const handlePointerDown = (e: PointerEvent) => {
+      e.preventDefault();
+      canvas.setPointerCapture(e.pointerId);
+      const point = getCanvasPoint(e);
 
       isDrawing.current = true;
       points.current = [point];
@@ -57,10 +70,11 @@ const Canvas = ({
       ctx.moveTo(point.x, point.y);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (e: PointerEvent) => {
       if (!isDrawing.current) return;
 
-      const point = { x: e.offsetX, y: e.offsetY };
+      e.preventDefault();
+      const point = getCanvasPoint(e);
 
       onDrawChange(true);
       points.current.push(point);
@@ -83,7 +97,16 @@ const Canvas = ({
       ctx.stroke();
     };
 
-    const handleMouseUp = async () => {
+    const finishDrawing = async (e?: PointerEvent) => {
+      if (e) {
+        e.preventDefault();
+        if (canvas.hasPointerCapture(e.pointerId)) {
+          canvas.releasePointerCapture(e.pointerId);
+        }
+      }
+
+      if (!isDrawing.current) return;
+
       isDrawing.current = false;
 
       if (!skeletonCanvasRef.current || !canvasRef.current) return;
@@ -102,28 +125,34 @@ const Canvas = ({
       ctx.beginPath();
     };
 
-    const handleMouseLeave = () => {
+    const handlePointerCancel = (e: PointerEvent) => {
+      e.preventDefault();
+      if (canvas.hasPointerCapture(e.pointerId)) {
+        canvas.releasePointerCapture(e.pointerId);
+      }
       isDrawing.current = false;
       ctx.beginPath();
     };
 
-    canvas.addEventListener("mousedown", handleMouseDown);
-    canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("mouseup", handleMouseUp);
-    canvas.addEventListener("mouseleave", handleMouseLeave);
+    canvas.addEventListener("pointerdown", handlePointerDown);
+    canvas.addEventListener("pointermove", handlePointerMove);
+    canvas.addEventListener("pointerup", finishDrawing);
+    canvas.addEventListener("pointercancel", handlePointerCancel);
+    canvas.addEventListener("lostpointercapture", handlePointerCancel);
 
     return () => {
-      canvas.removeEventListener("mousedown", handleMouseDown);
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("mouseup", handleMouseUp);
-      canvas.removeEventListener("mouseleave", handleMouseLeave);
+      canvas.removeEventListener("pointerdown", handlePointerDown);
+      canvas.removeEventListener("pointermove", handlePointerMove);
+      canvas.removeEventListener("pointerup", finishDrawing);
+      canvas.removeEventListener("pointercancel", handlePointerCancel);
+      canvas.removeEventListener("lostpointercapture", handlePointerCancel);
     };
   }, [canvasRef, onChangeScore, onDrawChange, skeletonCanvasRef, width, height]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute top-0 left-0 z-10"
+      className="absolute top-0 left-0 z-10 touch-none"
       width={width}
       height={height}
     />

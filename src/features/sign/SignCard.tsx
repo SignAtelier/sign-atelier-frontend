@@ -83,7 +83,7 @@ const SignCard = ({
   return (
     <div className="flex flex-col items-center justify-center border rounded-md border-gray-200 p-4 group">
       <div onClick={openDeleteModal} className="self-end cursor-pointer">
-        <IoClose className="opacity-0 group-hover:opacity-100" />
+        <IoClose />
       </div>
 
       <div className="w-30 pb-6 flex items-center justify-center overflow-clip">
@@ -106,7 +106,7 @@ const SignCard = ({
 
           {!sign.isDeleted && (
             <button onClick={openEditModal} className="cursor-pointer">
-              <MdModeEdit className="w-4 h-4 text-gray-500 shrink-0 hidden group-hover:block" />
+              <MdModeEdit className="w-4 h-4 text-gray-500 shrink-0" />
             </button>
           )}
         </div>
