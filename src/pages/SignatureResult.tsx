@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { LuArchive, LuRefreshCw } from "react-icons/lu";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getApiErrorMessage } from "../apis/error";
 import { generateSign } from "../apis/generateSign";
 import { saveSign } from "../apis/signs";
+import LoginModal from "../features/auth/LoginModal";
 import Button from "../shared/components/Button";
 import Header from "../shared/components/Header";
 import Loading from "../shared/components/Loading";
 import { useToast } from "../shared/components/ToastProvider";
 import { useSignStore } from "../store/signStore";
+import { useUserStore } from "../store/userStore";
 
 type LoadingVariant = "default" | "signature";
 
@@ -18,24 +20,26 @@ const SignatureResult = () => {
     useState("싸인을 생성하고 있습니다");
   const [loadingVariant, setLoadingVariant] =
     useState<LoadingVariant>("signature");
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [pendingSaveUrl, setPendingSaveUrl] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { accessToken, userInfo } = useUserStore();
   const [params] = useSearchParams();
   const signUrl = params.get("signUrl");
 
-  const handleSave = async () => {
-    if (!signUrl) return;
-
+  const saveGeneratedSign = useCallback(async (targetUrl: string) => {
     setLoadingMessage("싸인을 보관함에 저장하고 있습니다");
     setLoadingVariant("default");
     setIsLoading(true);
 
     try {
-      const status = await saveSign(signUrl);
+      const status = await saveSign(targetUrl);
 
       if (status === 201) {
         showToast({ type: "success", message: "싸인을 보관함에 저장했습니다." });
+        setPendingSaveUrl(null);
         navigate("/signature/list");
       }
     } catch (error: unknown) {
@@ -45,6 +49,29 @@ const SignatureResult = () => {
       setLoadingVariant("signature");
       setIsLoading(false);
     }
+  }, [navigate, showToast]);
+
+  const handleSave = async () => {
+    if (!signUrl) return;
+
+    if (!accessToken || !userInfo) {
+      setPendingSaveUrl(signUrl);
+      setIsLoginModalOpen(true);
+      showToast({
+        type: "info",
+        message: "보관함에 저장하려면 먼저 로그인해 주세요.",
+      });
+
+      return;
+    }
+
+    await saveGeneratedSign(signUrl);
+  };
+
+  const handleLoginSuccess = () => {
+    if (!pendingSaveUrl) return;
+
+    void saveGeneratedSign(pendingSaveUrl);
   };
 
   const handleRegenerate = async () => {
@@ -75,6 +102,12 @@ const SignatureResult = () => {
 
   return (
     <div className="min-h-screen bg-[#f8f3ea] text-stone-950">
+      {isLoginModalOpen && (
+        <LoginModal
+          onClose={() => setIsLoginModalOpen(false)}
+          onSuccess={handleLoginSuccess}
+        />
+      )}
       <Header />
 
       <main className="mx-auto flex min-h-[calc(100vh-73px)] w-full max-w-5xl flex-col items-center px-6 py-12">

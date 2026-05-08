@@ -8,13 +8,21 @@ import { useUserStore } from "../../store/userStore";
 import type { LoginModalProps } from "./types";
 
 const GOOGLE_SCRIPT_ID = "google-identity-services";
+const GOOGLE_READY_TIMEOUT_MS = 5000;
+const GOOGLE_READY_CHECK_INTERVAL_MS = 100;
+
+let googleIdentityScriptPromise: Promise<void> | null = null;
+
+const isGoogleIdentityReady = () => Boolean(window.google?.accounts?.id);
 
 const loadGoogleIdentityScript = () => {
+  if (googleIdentityScriptPromise) return googleIdentityScriptPromise;
+
   const existingScript = document.getElementById(GOOGLE_SCRIPT_ID);
 
   if (existingScript) return Promise.resolve();
 
-  return new Promise<void>((resolve, reject) => {
+  googleIdentityScriptPromise = new Promise<void>((resolve, reject) => {
     const script = document.createElement("script");
 
     script.id = GOOGLE_SCRIPT_ID;
@@ -22,13 +30,44 @@ const loadGoogleIdentityScript = () => {
     script.async = true;
     script.defer = true;
     script.onload = () => resolve();
-    script.onerror = () => reject(new Error("Google 로그인 SDK를 불러오지 못했습니다."));
+    script.onerror = () => {
+      googleIdentityScriptPromise = null;
+      reject(new Error("Google 로그인 SDK를 불러오지 못했습니다."));
+    };
 
     document.head.appendChild(script);
   });
+
+  return googleIdentityScriptPromise;
 };
 
-const LoginModal = ({ onClose }: LoginModalProps) => {
+const waitForGoogleIdentity = () => {
+  if (isGoogleIdentityReady()) return Promise.resolve();
+
+  return new Promise<void>((resolve, reject) => {
+    const startedAt = Date.now();
+
+    const checkGoogleIdentity = () => {
+      if (isGoogleIdentityReady()) {
+        resolve();
+
+        return;
+      }
+
+      if (Date.now() - startedAt >= GOOGLE_READY_TIMEOUT_MS) {
+        reject(new Error("Google 로그인 SDK가 초기화되지 않았습니다."));
+
+        return;
+      }
+
+      window.setTimeout(checkGoogleIdentity, GOOGLE_READY_CHECK_INTERVAL_MS);
+    };
+
+    checkGoogleIdentity();
+  });
+};
+
+const LoginModal = ({ onClose, onSuccess }: LoginModalProps) => {
   const buttonRef = useRef<HTMLDivElement | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,19 +84,15 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
 
     let isMounted = true;
 
-    loadGoogleIdentityScript()
-      .then(() => {
+    const renderGoogleButton = async () => {
+      try {
+        await loadGoogleIdentityScript();
+        await waitForGoogleIdentity();
+
         if (!isMounted || !buttonRef.current) return;
 
-        if (!window.google) {
-          setErrorMessage("Google 로그인 SDK가 초기화되지 않았습니다.");
-          setIsLoading(false);
-
-          return;
-        }
-
         buttonRef.current.innerHTML = "";
-        window.google.accounts.id.initialize({
+        window.google!.accounts.id.initialize({
           client_id: clientId,
           callback: async ({ credential }) => {
             if (!credential) {
@@ -76,13 +111,14 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
 
               if (userInfo) store.setUserInfo(userInfo);
 
+              onSuccess?.();
               onClose();
             } catch {
               setErrorMessage("Google 로그인에 실패했습니다.");
             }
           },
         });
-        window.google.accounts.id.renderButton(buttonRef.current, {
+        window.google!.accounts.id.renderButton(buttonRef.current, {
           theme: "outline",
           size: "large",
           type: "standard",
@@ -91,16 +127,24 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
           width: 280,
         });
         setIsLoading(false);
-      })
-      .catch(() => {
-        setErrorMessage("Google 로그인 SDK를 불러오지 못했습니다.");
+      } catch (error) {
+        if (!isMounted) return;
+
+        setErrorMessage(
+          error instanceof Error
+            ? error.message
+            : "Google 로그인 SDK를 불러오지 못했습니다."
+        );
         setIsLoading(false);
-      });
+      }
+    };
+
+    renderGoogleButton();
 
     return () => {
       isMounted = false;
     };
-  }, [onClose]);
+  }, [onClose, onSuccess]);
 
   return (
     <Modal onClose={onClose}>
