@@ -23,6 +23,7 @@ export interface PracticeRecordsProps {
 
 export interface DownloadModalProps {
   url: string;
+  fileName: string;
   onClose: () => void;
 }
 
@@ -65,5 +66,6 @@ export interface CanvasProps {
   canvasRef: RefObject<HTMLCanvasElement | null>;
   signOutlineUrl?: string;
   onChangeScore: Dispatch<SetStateAction<number>>;
+  onDrawChange: Dispatch<SetStateAction<boolean>>;
   skeletonCanvasRef: React.RefObject<HTMLCanvasElement | null>;
 }

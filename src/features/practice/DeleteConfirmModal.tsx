@@ -19,12 +19,24 @@ const DeleteConfirmModal = ({
           {count}개의 연습 기록이 삭제됩니다.
         </p>
         <div className="flex justify-end gap-3">
-          <Button onClick={onCancel} style="bg-white border text-gray-800">
-            취소
-          </Button>
-          <Button onClick={onConfirm} style="bg-red-400 text-white">
-            삭제
-          </Button>
+          <div className="w-20">
+            <Button
+              onClick={onCancel}
+              style="bg-white border text-gray-800"
+              padding="py-2"
+            >
+              취소
+            </Button>
+          </div>
+          <div className="w-20">
+            <Button
+              onClick={onConfirm}
+              style="bg-red-400 text-white"
+              padding="py-2"
+            >
+              삭제
+            </Button>
+          </div>
         </div>
       </div>
     </Modal>

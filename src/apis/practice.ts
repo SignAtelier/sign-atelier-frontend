@@ -1,4 +1,3 @@
-import axios from "axios";
 import authAxios from "./axios";
 import { throwApiError } from "./error";
 
@@ -43,18 +42,21 @@ export const getPresignedUrl = async (keys: string[]) => {
   }
 };
 
-export const downloadPractice = async (url: string) => {
+export const downloadPractice = async (fileName: string) => {
   try {
-    const response = await axios.get(url, { responseType: "blob" });
+    const response = await authAxios.get("/api/practices/download", {
+      params: { file_name: fileName },
+      responseType: "blob",
+    });
     const responseUrl = URL.createObjectURL(response.data);
     const a = document.createElement("a");
 
     a.href = responseUrl;
-    a.download = "signature.png";
+    a.download = "practice.png";
     document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(a.href);
     document.body.removeChild(a);
+    URL.revokeObjectURL(responseUrl);
   } catch (error: unknown) {
     throwApiError(error, "다운로드 링크 만료. 새로고침 해주세요");
   }

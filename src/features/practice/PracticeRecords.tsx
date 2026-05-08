@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { getApiErrorMessage } from "../../apis/error";
-import { deletePractices } from "../../apis/practice";
-import type { Practice } from "../../apis/types";
-import Button from "../../shared/components/Button";
-import { useToast } from "../../shared/components/ToastProvider";
-import DeleteConfirmModal from "./DeleteConfirmModal";
-import DownloadModal from "./DownloadModal";
-import type { PracticeRecordsProps } from "./types";
+import { useState } from 'react';
+import { getApiErrorMessage } from '../../apis/error';
+import { deletePractices } from '../../apis/practice';
+import type { Practice } from '../../apis/types';
+import Button from '../../shared/components/Button';
+import { useToast } from '../../shared/components/ToastProvider';
+import DeleteConfirmModal from './DeleteConfirmModal';
+import DownloadModal from './DownloadModal';
+import type { PracticeRecordsProps } from './types';
 
 const PracticeRecords = ({
   practices,
@@ -34,7 +34,7 @@ const PracticeRecords = ({
     try {
       const responseCode = await deletePractices(fileNames);
 
-      if (responseCode === "DELETE_SUCCESS") {
+      if (responseCode === 'DELETE_SUCCESS') {
         const updated = practices.filter(
           (practice) => !deleteList.includes(practice)
         );
@@ -43,10 +43,10 @@ const PracticeRecords = ({
         setDeleteList([]);
         setIsSelectMode(false);
         setIsDeleteConfirmOpen(false);
-        showToast({ type: "success", message: "연습 기록을 삭제했습니다." });
+        showToast({ type: 'success', message: '연습 기록을 삭제했습니다.' });
       }
     } catch (error: unknown) {
-      showToast({ type: "error", message: getApiErrorMessage(error) });
+      showToast({ type: 'error', message: getApiErrorMessage(error) });
     }
   };
 
@@ -81,12 +81,14 @@ const PracticeRecords = ({
               style="bg-white"
             >
               {deleteList.length === practices.length
-                ? "선택 해제"
-                : "전체 선택"}
+                ? '선택 해제'
+                : '전체 선택'}
             </Button>
             <Button
               onClick={() => {
-                deleteList.length > 0 && setIsDeleteConfirmOpen(true);
+                if (deleteList.length > 0) {
+                  setIsDeleteConfirmOpen(true);
+                }
               }}
               padding="py-1"
               style="bg-red-400 text-white"
@@ -95,7 +97,7 @@ const PracticeRecords = ({
             </Button>
           </div>
         ) : (
-          <div className="w-16">
+          <div className="w-24">
             <Button
               onClick={() => {
                 setIsSelectMode(true);
@@ -103,7 +105,7 @@ const PracticeRecords = ({
               padding="py-1"
               style="bg-white shadow-sm border border-gray-400 text-gray-600"
             >
-              선택
+              삭제 모드
             </Button>
           </div>
         )}
@@ -129,8 +131,8 @@ const PracticeRecords = ({
               border rounded-lg shadow transition cursor-pointer p-4 flex flex-col items-center
               ${
                 isSelectMode && isInDeleteList(practice)
-                  ? "bg-sky-50 border-sky-400 ring-2 ring-sky-300"
-                  : "bg-white border-gray-200 hover:shadow-md hover:border-sky-400"
+                  ? 'bg-sky-50 border-sky-400 ring-2 ring-sky-300'
+                  : 'bg-white border-gray-200 hover:shadow-md hover:border-sky-400'
               }
             `}
             >
@@ -153,6 +155,7 @@ const PracticeRecords = ({
       {selectedPractice && (
         <DownloadModal
           url={selectedPractice.url}
+          fileName={selectedPractice.fileName}
           onClose={() => setSelectedPractice(null)}
         />
       )}

@@ -5,7 +5,7 @@ import Modal from "../../shared/components/Modal";
 import { useToast } from "../../shared/components/ToastProvider";
 import type { DownloadModalProps } from "./types";
 
-const DownloadModal = ({ url, onClose }: DownloadModalProps) => {
+const DownloadModal = ({ url, fileName, onClose }: DownloadModalProps) => {
   const { showToast } = useToast();
 
   return (
@@ -24,7 +24,7 @@ const DownloadModal = ({ url, onClose }: DownloadModalProps) => {
           <Button
             onClick={async () => {
               try {
-                await downloadPractice(url);
+                await downloadPractice(fileName);
                 showToast({ type: "success", message: "연습 기록을 다운로드했습니다." });
                 onClose();
               } catch (error: unknown) {

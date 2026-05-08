@@ -20,24 +20,28 @@ const PracticeCanvas = ({
 }: PracticeCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [score, setScore] = useState<number>(0);
+  const [hasDrawn, setHasDrawn] = useState(false);
   const { sign_id } = useParams();
   const signId = sign_id;
   const { showToast } = useToast();
 
-  const isCanvasBlank = (canvas: HTMLCanvasElement) => {
+  const hasUserStroke = (canvas: HTMLCanvasElement) => {
     const ctx = canvas.getContext("2d");
 
-    if (!ctx) return true;
+    if (!ctx) return false;
 
     const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
     for (let i = 0; i < pixels.length; i += 4) {
+      const red = pixels[i];
+      const green = pixels[i + 1];
+      const blue = pixels[i + 2];
       const alpha = pixels[i + 3];
 
-      if (alpha !== 0) return false;
+      if (alpha > 0 && red < 250 && green < 250 && blue < 250) return true;
     }
 
-    return true;
+    return false;
   };
 
   const handleClear = () => {
@@ -50,12 +54,18 @@ const PracticeCanvas = ({
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       setScore(0);
+      setHasDrawn(false);
     }
   };
 
   const handleUpload = () => {
-    if (!signId || !canvasRef.current || isCanvasBlank(canvasRef.current))
+    if (!signId || !canvasRef.current) return;
+
+    if (!hasDrawn || !hasUserStroke(canvasRef.current)) {
+      showToast({ type: "info", message: "먼저 싸인을 따라 연습해 주세요." });
+
       return;
+    }
 
     canvasRef.current.toBlob(async (blob) => {
       if (!blob) return;
@@ -98,6 +108,7 @@ const PracticeCanvas = ({
               height={size.height}
               canvasRef={canvasRef}
               onChangeScore={setScore}
+              onDrawChange={setHasDrawn}
               skeletonCanvasRef={skeletonCanvasRef}
             />
             {showScore && (
@@ -116,10 +127,12 @@ const PracticeCanvas = ({
       </div>
 
       <div className="flex gap-4 w-full h-10">
-        <Button onClick={handleClear} style="text-black bg-white border">
+        <Button onClick={handleClear} style="text-black bg-white border" padding="py-0">
           다시 그리기
         </Button>
-        <Button onClick={handleUpload}>저장하기</Button>
+        <Button onClick={handleUpload} padding="py-0">
+          저장하기
+        </Button>
       </div>
     </div>
   );

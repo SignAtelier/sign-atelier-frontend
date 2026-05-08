@@ -10,6 +10,7 @@ const Canvas = ({
   height,
   canvasRef,
   onChangeScore,
+  onDrawChange,
   skeletonCanvasRef,
 }: CanvasProps) => {
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -38,7 +39,8 @@ const Canvas = ({
     contextRef.current = ctx;
 
     onChangeScore(0);
-  }, [width, height]);
+    onDrawChange(false);
+  }, [canvasRef, width, height, onChangeScore, onDrawChange]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -60,6 +62,7 @@ const Canvas = ({
 
       const point = { x: e.offsetX, y: e.offsetY };
 
+      onDrawChange(true);
       points.current.push(point);
 
       if (points.current.length < 3) {
@@ -115,7 +118,7 @@ const Canvas = ({
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [width, height]);
+  }, [canvasRef, onChangeScore, onDrawChange, skeletonCanvasRef, width, height]);
 
   return (
     <canvas

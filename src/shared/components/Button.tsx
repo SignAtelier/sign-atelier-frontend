@@ -9,7 +9,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={`w-full rounded-md cursor-pointer font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 ${style} ${padding}`}
+      className={`inline-flex w-full items-center justify-center rounded-md cursor-pointer font-semibold leading-none transition disabled:cursor-not-allowed disabled:opacity-50 ${style} ${padding}`}
       onClick={onClick}
       disabled={disabled}
     >
