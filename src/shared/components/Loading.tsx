@@ -16,7 +16,7 @@ const Loading = ({ children, variant = "default" }: LoadingProps) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/35 p-6 backdrop-blur-sm">
-      <div className="flex w-full max-w-md flex-col items-center rounded-md border border-stone-200 bg-[#f8f3ea] px-8 py-10 shadow-2xl">
+      <div className="flex w-full max-w-md flex-col items-center rounded-md border border-stone-200 bg-[#f8f3ea] px-8 py-10 shadow-2xl shadow-stone-950/15">
         {isSignature ? (
           <div className="h-[180px] w-[300px] overflow-hidden">
             <Lottie

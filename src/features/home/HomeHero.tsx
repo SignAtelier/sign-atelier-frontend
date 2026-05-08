@@ -1,4 +1,4 @@
-import { LuSparkles } from "react-icons/lu";
+import { LuSparkles } from 'react-icons/lu';
 
 const HomeHero = () => {
   return (
@@ -10,7 +10,7 @@ const HomeHero = () => {
             모든 싸인은 AI가 생성합니다
           </div>
           <h1 className="max-w-4xl text-5xl font-black leading-tight tracking-tight max-md:text-4xl">
-            영어 이름으로 만드는 나만의 시그니처.
+            이름으로 만드는 나만의 시그니처
           </h1>
         </div>
       </section>

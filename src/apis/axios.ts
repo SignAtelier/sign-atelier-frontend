@@ -1,8 +1,8 @@
-import axios, { type AxiosInstance } from "axios";
-import { useUserStore } from "../store/userStore";
+import axios, { type AxiosInstance } from 'axios';
+import { useUserStore } from '../store/userStore';
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? "https://5ec0ae27d9fa.ngrok-free.app";
+  import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000';
 
 const authAxios: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -48,7 +48,7 @@ authAxios.interceptors.response.use(
         return authAxios(originalConfig);
       } catch {
         useUserStore.getState().clearAll();
-        window.location.href = "/";
+        window.location.href = '/';
       }
     }
 
